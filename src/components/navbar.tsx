@@ -20,8 +20,7 @@ import { ThemeSwitch } from "@/src/components/theme-switch";
 import { Logo } from "@/src/components/icons";
 
 export const Navbar = () => {
-  const pathname = usePathname()
-  console.log(pathname);
+  const pathname = usePathname();
 
   return (
     <NextUINavbar
@@ -51,7 +50,9 @@ export const Navbar = () => {
                   className={clsx(
                     linkStyles({ color: "foreground" }),
                     "text-white font-medium px-3 py-2 rounded-md transition-all",
-                    isActive ? "border-b-2 border-white rounded-none" : "border-none" // Active link background color
+                    isActive
+                      ? "border-b-2 border-white rounded-none"
+                      : "border-none" // Active link background color
                   )}
                   href={item.href}
                 >
