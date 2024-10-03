@@ -26,7 +26,7 @@ export const Navbar = () => {
     <NextUINavbar
       className="bg-primary dark:bg-default text-white"
       maxWidth="full"
-      position="sticky"
+      position="static"
     >
       {/* Left Side - Logo */}
       <NavbarContent className="basis-1/5" justify="start">
