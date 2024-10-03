@@ -10,10 +10,13 @@ import { useEffect } from "react";
 import { useUserLogin } from "@/src/hooks/auth.hooks";
 import GSForm from "@/src/components/form/GSForm";
 import GSInput from "@/src/components/form/GSInput";
+import { useUser } from "@/src/context/user.provider";
 
 const Login = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  const {setIsLoading} = useUser();
 
   const redirect = searchParams.get("redirect");
 
@@ -21,6 +24,7 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     handleLoginUser(data);
+    setIsLoading(true)
   };
 
   useEffect(() => {

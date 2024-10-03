@@ -1,6 +1,7 @@
 "use server";
 
 import axiosInstance from "@/src/lib/AxiosInstance";
+import { IUser } from "@/src/types";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
@@ -44,5 +45,24 @@ export const logout = () => {
   cookies().delete("refreshToken");
 };
 
+export const getCurrentUser = async () => {
+  const accessToken = cookies().get("accessToken")?.value;
+
+  let decodedToken = null;
+
+  if (accessToken) {
+    decodedToken = await jwtDecode(accessToken);
+
+    const res = await axiosInstance.get(
+      `/user/${decodedToken._id}`
+    );
+
+    const userData: IUser = await res.data.data;
+    
+    return userData;
+  }
+
+  return decodedToken;
+};
 
 
