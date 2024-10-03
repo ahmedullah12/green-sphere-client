@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const Post = ({ post }: IProps) => {
-  const { title, images, userId, description } = post || {};
+  const { title, images, userId, description, upvotes, downvotes } = post || {};
 
   return (
     <Card className="py-4">
@@ -52,11 +52,12 @@ const Post = ({ post }: IProps) => {
         <div className="flex items-center space-x-4">
           <button className="flex items-center space-x-1 text-gray-500 hover:text-blue-500 transition-colors">
             <BiUpvote className="text-xl" />
-            {/* <span className="text-sm">Upvote</span> */}
+             <span className="text-sm">{upvotes.length}</span>
+            
           </button>
           <button className="flex items-center space-x-1 text-gray-500 hover:text-red-500 transition-colors">
             <BiDownvote className="text-xl" />
-            {/* <span className="text-sm">Downvote</span> */}
+            <span className="text-sm">{downvotes.length}</span>
           </button>
         </div>
         <div className="flex items-center space-x-4">

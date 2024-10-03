@@ -1,52 +1,81 @@
-// components/Filters.tsx
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useForm, Controller } from "react-hook-form";
+import { Input } from "@nextui-org/input";
+import { Select, SelectItem } from "@nextui-org/select";
+import { POST_CATEGORY } from "@/src/constants";
+import useDebounce from "@/src/hooks/debounce.hook";
 
 const Filters = () => {
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("");
+  const { register, watch, setValue, control } = useForm({
+    defaultValues: {
+      search: "",
+      category: "",
+    },
+  });
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-  };
+  const router = useRouter();
+  const search = watch("search");
+  const category = watch("category");
+  const debouncedSearch = useDebounce(search, 500);
 
-  const handleCategoryChange = (category: string) => {
-    setCategory(category);
-  };
+  // Update the URL when debounced search or category changes
+  useEffect(() => {
+    const queryParams = new URLSearchParams();
+
+    if (debouncedSearch) {
+      queryParams.set("searchTerm", debouncedSearch);
+    } else {
+      queryParams.delete("searchTerm");
+    }
+
+    if (category) {
+      queryParams.set("category", category);
+    } else {
+      queryParams.delete("category");
+    }
+
+    // Update the URL without reloading the page
+    router.push(`?${queryParams.toString()}`, { scroll: false });
+  }, [debouncedSearch, category, router]);
 
   return (
     <div className="w-full flex flex-col gap-6">
-      {/* Search Field */}
-      <input
+      <Input
+        size="sm"
         type="text"
-        placeholder="Search posts..."
-        value={search}
-        onChange={handleSearch}
-        className="px-4 py-2 border rounded"
+        label="Search Post"
+        {...register("search")}
       />
 
       {/* Categories Filter */}
       <div className="flex flex-col gap-2">
-        <h3 className="text-lg font-semibold">Filter by Category:</h3>
-        <button
-          className={`py-2 px-4 rounded ${category === "flowers" ? "bg-primary text-white" : "bg-gray-200"}`}
-          onClick={() => handleCategoryChange("flowers")}
-        >
-          Flowers
-        </button>
-        <button
-          className={`py-2 px-4 rounded ${category === "vegetables" ? "bg-primary text-white" : "bg-gray-200"}`}
-          onClick={() => handleCategoryChange("vegetables")}
-        >
-          Vegetables
-        </button>
-        <button
-          className={`py-2 px-4 rounded ${category === "" ? "bg-primary text-white" : "bg-gray-200"}`}
-          onClick={() => handleCategoryChange("")}
-        >
-          All
-        </button>
+        <h3 className="text-lg font-semibold">Filters</h3>
+
+        <Controller
+          name="category"
+          control={control}
+          render={({ field }) => (
+            <Select
+              size="sm"
+              label="Select a category"
+              className="max-w-xs"
+              selectedKeys={field.value ? [field.value] : []}
+              onSelectionChange={(keys) => {
+                const selectedValue = Array.from(keys).join("");
+                field.onChange(selectedValue);
+              }}
+            >
+              {Object.entries(POST_CATEGORY).map(([key, value]) => (
+                <SelectItem key={value} value={value}>
+                  {key.replace("_", " ")}
+                </SelectItem>
+              ))}
+            </Select>
+          )}
+        />
       </div>
     </div>
   );

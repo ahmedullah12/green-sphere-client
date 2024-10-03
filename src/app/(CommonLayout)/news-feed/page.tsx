@@ -4,10 +4,14 @@ import { IPost } from "@/src/types";
 import axiosInstance from "@/src/lib/AxiosInstance";
 import CreatePostButton from "../_components/page/news-feed/CreatePostButton";
 
-const NewsFeed = async () => {
+const NewsFeed = async ({ searchParams }: { searchParams: any }) => {
+  const params = new URLSearchParams(searchParams);
+
   const res = await axiosInstance.get("/posts", {
     params: {
-      sortBy: "-createdAt",
+      sortBy: params.get("sortBy") || "-createdAt",
+      searchTerm: params.get("searchTerm"),
+      category: params.get("category"),
     },
   });
   const posts = await res.data;
