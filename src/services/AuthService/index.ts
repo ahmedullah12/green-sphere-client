@@ -65,4 +65,3 @@ export const getCurrentUser = async () => {
   return decodedToken;
 };
 
-
