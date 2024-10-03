@@ -48,9 +48,9 @@ export default function RegisterPage() {
   }, [isPending, isSuccess]);
 
   return (
-    <div className="flex h-[calc(100vh-100px)] flex-col items-center justify-center">
-      <h3 className="my-2 text-xl font-bold">Register with GreenSphere</h3>
-      <div className="w-full md:w-[50%] lg:w-[35%] px-4">
+    <div className="flex h-[calc(100vh-100px)] flex-col items-center justify-center ">
+      <div className="w-full md:w-[50%] lg:w-[35%] px-4 py-4 shadow-md">
+      <h3 className="my-2 text-xl font-bold text-center">Register with GreenSphere</h3>
         <GSForm onSubmit={onSubmit}>
           <div className="py-3">
             <GSInput label="Name" name="name" size="sm" />
@@ -92,7 +92,7 @@ export default function RegisterPage() {
           </Button>
         </GSForm>
         <div className="text-center">
-          Already have an account ? <Link href={"/login"}>Login</Link>
+          Already have an account ? <Link className="hover:underline" href={"/login"}>Login</Link>
         </div>
       </div>
     </div>
