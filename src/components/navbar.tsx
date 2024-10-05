@@ -19,13 +19,11 @@ import { siteConfig } from "@/src/config/site";
 import { ThemeSwitch } from "@/src/components/theme-switch";
 import { Logo } from "@/src/components/icons";
 import { useUser } from "../context/user.provider";
-import { Button } from "@nextui-org/button";
 import NavbarDropdown from "./NavbarDropdown";
 
 export const Navbar = () => {
   const pathname = usePathname();
   const { user } = useUser();
-  console.log(user);
 
   return (
     <NextUINavbar

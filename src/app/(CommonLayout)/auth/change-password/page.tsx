@@ -1,54 +1,63 @@
 "use client";
 
-
 import { Button } from "@nextui-org/button";
-import Link from "next/link";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import Loading from "@/src/components/UI/Loading";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useUserLogin } from "@/src/hooks/auth.hooks";
+import { useChangePassword } from "@/src/hooks/auth.hooks";
 import GSForm from "@/src/components/form/GSForm";
 import GSInput from "@/src/components/form/GSInput";
 import { useUser } from "@/src/context/user.provider";
 
-const Login = () => {
-  const searchParams = useSearchParams();
+const ChangePassword = () => {
   const router = useRouter();
 
-  const {setIsLoading} = useUser();
+  const { user, isLoading } = useUser();
 
-  const redirect = searchParams.get("redirect");
+  useEffect(() => {
+    if (!user && !isLoading) {
+      router.push("/login");
+    }
+  }, [user]);
 
-  const { mutate: handleLoginUser, isPending, isSuccess } = useUserLogin();
+  const {
+    mutate: handleChangePassword,
+    isPending,
+    isSuccess,
+  } = useChangePassword();
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    handleLoginUser(data);
-    setIsLoading(true)
+    handleChangePassword({ userId: user?._id, userData: data });
   };
 
   useEffect(() => {
     if (!isPending && isSuccess) {
-      if (redirect) {
-        router.push(redirect);
-      } else {
-        router.push("/");
-      }
+      router.push("/profile");
     }
   }, [isPending, isSuccess]);
   return (
     <>
       <div className="flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center">
         <div className="w-full md:w-[50%] lg:w-[35%] px-4 py-4 shadow-md">
-        <h3 className="my-2 text-xl font-bold text-center">Login with GreenSphere</h3>
-          <GSForm
-            onSubmit={onSubmit}
-          >
+          <h3 className="my-2 text-xl font-bold text-center">
+            Change Password
+          </h3>
+          <GSForm onSubmit={onSubmit}>
             <div className="py-3">
-              <GSInput name="email" label="Email" type="email" required={true}/>
+              <GSInput
+                name="oldPassword"
+                label="Old Password"
+                type="password"
+                required={true}
+              />
             </div>
             <div className="py-3">
-              <GSInput name="password" label="Password" type="password" required={true}/>
+              <GSInput
+                name="newPassword"
+                label="New Password"
+                type="password"
+                required={true}
+              />
             </div>
 
             <Button
@@ -57,16 +66,13 @@ const Login = () => {
               type="submit"
               isDisabled={isPending}
             >
-             Login
+              Change Password
             </Button>
           </GSForm>
-          <div className="text-center">
-            Don&lsquo;t have account ? <Link className="hover:underline" href={"/register"}>Register</Link>
-          </div>
         </div>
       </div>
     </>
   );
 };
 
-export default Login;
+export default ChangePassword;

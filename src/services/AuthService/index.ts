@@ -40,6 +40,16 @@ export const loginUser = async (userData: FieldValues) => {
   }
 };
 
+export const changePassword = async (userId: string, userData: FieldValues) => {
+  try {
+    const { data } = await axiosInstance.put(`/auth/change-password/${userId}`, userData);
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
 export const logout = () => {
   cookies().delete("accessToken");
   cookies().delete("refreshToken");
