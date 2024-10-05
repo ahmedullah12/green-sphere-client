@@ -42,7 +42,41 @@ export const loginUser = async (userData: FieldValues) => {
 
 export const changePassword = async (userId: string, userData: FieldValues) => {
   try {
-    const { data } = await axiosInstance.put(`/auth/change-password/${userId}`, userData);
+    const { data } = await axiosInstance.put(
+      `/auth/change-password/${userId}`,
+      userData
+    );
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
+export const passwordRecovery = async (userData: FieldValues) => {
+  try {
+    const { data } = await axiosInstance.post(
+      `/auth/forget-password`,
+      userData
+    );
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
+export const resetPassword = async (token: string, userData: FieldValues) => {
+  try {
+    const { data } = await axiosInstance.post(
+      `/auth/forget-password`,
+      userData,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
 
     return data;
   } catch (err: any) {
@@ -63,15 +97,12 @@ export const getCurrentUser = async () => {
   if (accessToken) {
     decodedToken = await jwtDecode(accessToken);
 
-    const res = await axiosInstance.get(
-      `/user/${decodedToken._id}`
-    );
+    const res = await axiosInstance.get(`/user/${decodedToken._id}`);
 
     const userData: IUser = await res.data.data;
-    
+
     return userData;
   }
 
   return decodedToken;
 };
-

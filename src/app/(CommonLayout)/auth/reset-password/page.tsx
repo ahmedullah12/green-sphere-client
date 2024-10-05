@@ -2,59 +2,62 @@
 
 import { Button } from "@nextui-org/button";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useChangePassword } from "@/src/hooks/auth.hooks";
+import { useResetPassword } from "@/src/hooks/auth.hooks";
 import GSForm from "@/src/components/form/GSForm";
 import GSInput from "@/src/components/form/GSInput";
 import { useUser } from "@/src/context/user.provider";
+import Loading from "@/src/components/UI/Loading";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { logout } from "@/src/services/AuthService";
 
-const ChangePassword = () => {
+const ResetPassword = () => {
+  const { user, isLoading, setIsLoading } = useUser();
+  const searchParams = useSearchParams();
+
   const router = useRouter();
 
-  const { user, isLoading } = useUser();
-
-  useEffect(() => {
-    if (!user && !isLoading) {
-      router.push("/login");
-    }
-  }, [user, isLoading]);
+  const token = searchParams.get("token");
 
   const {
-    mutate: handleChangePassword,
+    mutate: handleResetPassword,
     isPending,
     isSuccess,
-  } = useChangePassword();
+  } = useResetPassword();
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    handleChangePassword({ userId: user?._id, userData: data });
+    handleResetPassword({ token: token, userData: data });
   };
 
   useEffect(() => {
-    if (!isPending && isSuccess) {
-      router.push("/profile");
+    if (isSuccess) {
+      logout();
+      setIsLoading(true);
+      router.push("/login");
     }
-  }, [isPending, isSuccess]);
+  }, [isSuccess, router, logout, setIsLoading]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <>
       <div className="flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center">
         <div className="w-full md:w-[50%] lg:w-[35%] px-4 py-4 shadow-md">
-          <h3 className="my-2 text-xl font-bold text-center">
-            Change Password
-          </h3>
-          <GSForm onSubmit={onSubmit}>
+          <h3 className="my-2 text-xl font-bold text-center">Reset Password</h3>
+          <GSForm defaultValues={{ email: user?.email }} onSubmit={onSubmit}>
             <div className="py-3">
               <GSInput
-                name="oldPassword"
-                label="Old Password"
-                type="password"
+                name="email"
+                label="Your Email"
+                type="text"
                 required={true}
               />
             </div>
             <div className="py-3">
               <GSInput
                 name="newPassword"
-                label="New Password"
+                label="Your New Password"
                 type="password"
                 required={true}
               />
@@ -66,7 +69,7 @@ const ChangePassword = () => {
               type="submit"
               isDisabled={isPending}
             >
-              Change Password
+              Submit
             </Button>
           </GSForm>
         </div>
@@ -75,4 +78,4 @@ const ChangePassword = () => {
   );
 };
 
-export default ChangePassword;
+export default ResetPassword;

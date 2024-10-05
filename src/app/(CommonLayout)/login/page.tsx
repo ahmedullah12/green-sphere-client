@@ -4,7 +4,6 @@
 import { Button } from "@nextui-org/button";
 import Link from "next/link";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import Loading from "@/src/components/UI/Loading";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useUserLogin } from "@/src/hooks/auth.hooks";
@@ -59,8 +58,9 @@ const Login = () => {
             >
              Login
             </Button>
+            <Link className="text-xs hover:underline" href={"/auth/password-recovery"}>Forgot Password?</Link>
           </GSForm>
-          <div className="text-center">
+          <div className="text-center mt-2 font-medium">
             Don&lsquo;t have account ? <Link className="hover:underline" href={"/register"}>Register</Link>
           </div>
         </div>
