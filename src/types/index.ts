@@ -7,7 +7,7 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 export interface IPost {
   _id: string;
   title: string;
-  images: string[];
+  image: string;
   description: string;
   userId: IUser;
   category: string[];

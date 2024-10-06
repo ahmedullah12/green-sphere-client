@@ -1,16 +1,29 @@
+"use client";
+
 import { IPost } from "@/src/types";
 import { Avatar } from "@nextui-org/avatar";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Image } from "@nextui-org/image";
+import LightGallery from "lightgallery/react";
+import Link from "next/link";
 import { BiUpvote, BiDownvote, BiComment, BiShare } from "react-icons/bi";
+
+// import styles
+import "lightgallery/css/lightgallery.css";
+import "lightgallery/css/lg-zoom.css";
+import "lightgallery/css/lg-thumbnail.css";
+
+import lgThumbnail from "lightgallery/plugins/thumbnail";
+import lgZoom from "lightgallery/plugins/zoom";
 
 interface IProps {
   post: IPost;
 }
 
 const Post = ({ post }: IProps) => {
-  const { title, images, userId, description, upvotes, downvotes } = post || {};
+  const { _id, title, image, userId, description, upvotes, downvotes } =
+    post || {};
 
   return (
     <Card className="py-4">
@@ -32,16 +45,22 @@ const Post = ({ post }: IProps) => {
 
       <CardBody className="overflow-visible py-2 px-0">
         <div>
-          <Image
-            alt="Card background"
-            className="object-cover rounded-none"
-            src={images[0]}
-            width="100%"
-          />
+          <LightGallery speed={500} plugins={[lgThumbnail, lgZoom]}>
+            <Link href={image}>
+              <Image
+                alt="Card background"
+                className="object-cover rounded-none"
+                src={image}
+                width="100%"
+              />
+            </Link>
+          </LightGallery>
         </div>
 
         <div className="px-2">
-          <p className="text-xl font-medium my-1">{title}</p>
+          <p className="text-xl font-medium my-1 hover:underline">
+            <Link href={`/news-feed/${_id}`}>{title}</Link>
+          </p>
           <p className="text-gray-700 text-sm">{description}</p>
         </div>
       </CardBody>
@@ -52,8 +71,7 @@ const Post = ({ post }: IProps) => {
         <div className="flex items-center space-x-4">
           <button className="flex items-center space-x-1 text-gray-500 hover:text-blue-500 transition-colors">
             <BiUpvote className="text-xl" />
-             <span className="text-sm">{upvotes.length}</span>
-            
+            <span className="text-sm">{upvotes.length}</span>
           </button>
           <button className="flex items-center space-x-1 text-gray-500 hover:text-red-500 transition-colors">
             <BiDownvote className="text-xl" />

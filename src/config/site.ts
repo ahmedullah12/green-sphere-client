@@ -20,6 +20,10 @@ export const siteConfig = {
       label: "Contact Us",
       href: "/contact",
     },
+    {
+      label: "Gallery",
+      href: "/gallery",
+    },
   ],
   navMenuItems: [
     {
@@ -37,6 +41,10 @@ export const siteConfig = {
     {
       label: "Contact Us",
       href: "/contact",
+    },
+    {
+      label: "Gallery",
+      href: "/gallery",
     },
   ],
 };

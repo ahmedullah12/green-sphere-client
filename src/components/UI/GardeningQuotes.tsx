@@ -34,11 +34,11 @@ export default function GardeningQuotes() {
   };
 
   return (
-    <div className="bg-gradient-to-r from-green-100 to-green-200 p-6 rounded-lg shadow-lg max-w-2xl mx-auto my-8">
+    <div className="bg-[#c1f8d5] dark:bg-default p-6 rounded-lg shadow-lg max-w-2xl mx-auto my-12">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center">
-          <Leaf className="text-green-600 mr-2" size={24} />
-          <h2 className="text-2xl font-semibold text-green-800">Gardening Wisdom</h2>
+          <Leaf className="text-primary dark:text-white mr-2" size={24} />
+          <h2 className="text-2xl font-semibold text-primary dark:text-white">Gardening Wisdom</h2>
         </div>
         <RefreshButton onRefresh={handleRefresh} />
       </div>
@@ -50,8 +50,8 @@ export default function GardeningQuotes() {
         transition={{ duration: 0.5 }}
         className="text-center"
       >
-        <p className="text-lg text-green-700 italic mb-2">{quote.text}</p>
-        <p className="text-sm text-green-600">- {quote.author}</p>
+        <p className="text-lg text-primary dark:text-white italic mb-2">{quote.text}</p>
+        <p className="text-sm text-primary dark:text-white">- {quote.author}</p>
       </motion.div>
     </div>
   );
@@ -61,10 +61,10 @@ function RefreshButton({ onRefresh }: { onRefresh: () => void }) {
   return (
     <button
       onClick={onRefresh}
-      className="p-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors"
+      className="p-2 bg-primary dark:bg-gray-500 text-white rounded-full hover:bg-green-600 transition-colors"
       aria-label="Refresh quote"
     >
-      <RefreshCw size={20} />
+      <RefreshCw  size={20} />
     </button>
   );
 }

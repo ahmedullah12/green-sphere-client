@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { Input } from "@nextui-org/input";
 import { Select, SelectItem } from "@nextui-org/select";
@@ -9,43 +9,53 @@ import { POST_CATEGORY } from "@/src/constants";
 import useDebounce from "@/src/hooks/debounce.hook";
 
 const Filters = () => {
-  const { register, watch, setValue, control } = useForm({
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  const { register, watch, control, setValue } = useForm({
     defaultValues: {
-      search: "",
-      category: "",
-      sortBy: "",  // Allow dynamic sortBy
+      search: searchParams.get("searchTerm") || "",
+      category: searchParams.get("category") || "",
+      sortBy: searchParams.get("sortBy") || "-createdAt",
     },
   });
 
-  const router = useRouter();
   const search = watch("search");
   const category = watch("category");
   const sortBy = watch("sortBy");
   const debouncedSearch = useDebounce(search, 500);
 
-  // Determine default sort logic based on search/category
-  const derivedSortBy = debouncedSearch || category ? "-upvotes" : sortBy || "-createdAt";
+  useEffect(() => {
+    if (!isInitialized) {
+      setValue("search", searchParams.get("searchTerm") || "");
+      setValue("category", searchParams.get("category") || "");
+      setValue("sortBy", searchParams.get("sortBy") || "-createdAt");
+      setIsInitialized(true);
+    }
+  }, [searchParams, setValue, isInitialized]);
 
   useEffect(() => {
-    const queryParams = new URLSearchParams();
+    if (isInitialized) {
+      const queryParams = new URLSearchParams(searchParams.toString());
 
-    if (debouncedSearch) {
-      queryParams.set("searchTerm", debouncedSearch);
-    } else {
-      queryParams.delete("searchTerm");
+      if (debouncedSearch) {
+        queryParams.set("searchTerm", debouncedSearch);
+      } else {
+        queryParams.delete("searchTerm");
+      }
+
+      if (category) {
+        queryParams.set("category", category);
+      } else {
+        queryParams.delete("category");
+      }
+
+      queryParams.set("sortBy", sortBy);
+
+      router.push(`?${queryParams.toString()}`, { scroll: false });
     }
-
-    if (category) {
-      queryParams.set("category", category);
-    } else {
-      queryParams.delete("category");
-    }
-
-    // Set the sorting logic, by default -upvotes when there's search/category
-    queryParams.set("sortBy", derivedSortBy);
-
-    router.push(`?${queryParams.toString()}`, { scroll: false });
-  }, [debouncedSearch, category, derivedSortBy, router]);
+  }, [debouncedSearch, category, sortBy, router, isInitialized, searchParams]);
 
   return (
     <div className="w-full flex flex-col gap-6">
@@ -82,7 +92,6 @@ const Filters = () => {
           )}
         />
 
-        {/* Optional: Sort by Filter */}
         <Controller
           name="sortBy"
           control={control}
@@ -105,9 +114,6 @@ const Filters = () => {
               </SelectItem>
               <SelectItem key="-upvotes" value="-upvotes">
                 Most Upvotes
-              </SelectItem>
-              <SelectItem key="upvotes" value="upvotes">
-                Fewest Upvotes
               </SelectItem>
             </Select>
           )}
