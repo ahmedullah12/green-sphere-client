@@ -1,8 +1,7 @@
-import Post from "@/src/components/UI/Post/Post";
 import Filters from "../_components/page/news-feed/Filters";
-import { IPost } from "@/src/types";
-import axiosInstance from "@/src/lib/AxiosInstance";
 import CreatePostButton from "../_components/page/news-feed/CreatePostButton";
+import axiosInstance from "@/src/lib/AxiosInstance";
+import { LoadMoreNewsFeed } from "../_components/page/news-feed/LoadMoreNewsFeed";
 
 const NewsFeed = async ({ searchParams }: { searchParams: any }) => {
   const params = new URLSearchParams(searchParams);
@@ -12,6 +11,8 @@ const NewsFeed = async ({ searchParams }: { searchParams: any }) => {
       sortBy: params.get("sortBy") || "-createdAt",
       searchTerm: params.get("searchTerm"),
       category: params.get("category"),
+      page: 1,
+      limit: 1,
     },
   });
   const posts = await res.data;
@@ -32,9 +33,7 @@ const NewsFeed = async ({ searchParams }: { searchParams: any }) => {
 
           {/* Main Content Area */}
           <main className="lg:w-1/2 space-y-6 order-last lg:order-none">
-            {posts?.data.map((post: IPost) => (
-              <Post key={post._id} post={post} />
-            ))}
+            <LoadMoreNewsFeed initialPosts={posts.data} />
           </main>
 
           {/* Right Sidebar (for large devices) */}
