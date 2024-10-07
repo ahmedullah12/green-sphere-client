@@ -5,6 +5,7 @@ import axiosInstance from "@/src/lib/AxiosInstance";
 import { IPost } from "@/src/types";
 import { revalidateTag } from "next/cache";
 import { FieldValues } from "react-hook-form";
+import { StringDecoder } from "string_decoder";
 
 export const getPost = async (postId: string) => {
   let fetchOptions = {};
@@ -42,6 +43,17 @@ export const createPost = async (formData: FormData) => {
 export const updatePost = async (postId: string, postData: FieldValues) => {
   try {
     const { data } = await axiosInstance.put(`/posts/${postId}`, postData);
+
+    revalidateTag("posts");
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
+};
+export const deletePost = async (postId: string) => {
+  try {
+    const { data } = await axiosInstance.delete(`/posts/${postId}`);
 
     revalidateTag("posts");
 

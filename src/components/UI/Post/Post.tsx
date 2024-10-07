@@ -9,7 +9,6 @@ import { Image } from "@nextui-org/image";
 import Link from "next/link";
 import { BiUpvote, BiDownvote, BiComment, BiShare } from "react-icons/bi";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { Button } from "@nextui-org/button";
 import LightGallery from "lightgallery/react";
 import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-zoom.css";
@@ -18,6 +17,7 @@ import lgThumbnail from "lightgallery/plugins/thumbnail";
 import lgZoom from "lightgallery/plugins/zoom";
 import { useUser } from "@/src/context/user.provider";
 import EditPostModal from "../../modals/EditPostModal";
+import DeletePostModal from "../../modals/DeletePostModal";
 
 const Post = ({ post }: { post: IPost }) => {
   const { _id, title, image, tag, userId, category, upvotes, downvotes } = post || {};
@@ -69,11 +69,9 @@ const Post = ({ post }: { post: IPost }) => {
                 <BsThreeDotsVertical />
               </button>
               {showEditOptions && (
-                <div className="absolute top-[25px] right-0 flex flex-col gap-2 shadow-lg bg-green-50 px-4 py-2 z-50 rounded-md">
+                <div className="absolute top-[25px] right-0 flex flex-col gap-2 shadow-lg bg-green-50 dark:bg-gray-500 px-4 py-2 z-50 rounded-md">
                   <EditPostModal postData={post}/>
-                  <Button size="sm" className="bg-red-500 text-xs text-white">
-                    Delete
-                  </Button>
+                  <DeletePostModal postId={post._id}/>
                 </div>
               )}
             </div>
