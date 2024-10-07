@@ -1,10 +1,17 @@
-import Filters from "../_components/page/news-feed/Filters";
+
 import CreatePostButton from "../_components/page/news-feed/CreatePostButton";
 import axiosInstance from "@/src/lib/AxiosInstance";
 import { LoadMoreNewsFeed } from "../_components/page/news-feed/LoadMoreNewsFeed";
+import Filters from "../_components/page/news-feed/Filters";
+import GardeningQuotes from "@/src/components/UI/GardeningQuotes";
 
-const NewsFeed = async ({ searchParams }: { searchParams: any }) => {
-  const params = new URLSearchParams(searchParams);
+const NewsFeed = async ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) => {
+  const params = new URLSearchParams();
+  Object.entries(searchParams).forEach(([key, value]) => {
+    if (typeof value === 'string') {
+      params.append(key, value);
+    }
+  });
 
   const res = await axiosInstance.get("/posts", {
     params: {
@@ -15,7 +22,7 @@ const NewsFeed = async ({ searchParams }: { searchParams: any }) => {
       limit: 1,
     },
   });
-  const posts = await res.data;
+  const initialPosts = await res.data.data;
 
   return (
     <div className="min-h-screen">
@@ -33,7 +40,7 @@ const NewsFeed = async ({ searchParams }: { searchParams: any }) => {
 
           {/* Main Content Area */}
           <main className="lg:w-1/2 space-y-6 order-last lg:order-none">
-            <LoadMoreNewsFeed initialPosts={posts.data} />
+            <LoadMoreNewsFeed initialPosts={initialPosts} />
           </main>
 
           {/* Right Sidebar (for large devices) */}
@@ -41,6 +48,9 @@ const NewsFeed = async ({ searchParams }: { searchParams: any }) => {
             <div className="sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto bg-white dark:bg-default shadow-md rounded-lg p-4">
               <div className="mb-6">
                 <CreatePostButton />
+              </div>
+              <div>
+                <GardeningQuotes/>
               </div>
             </div>
           </aside>

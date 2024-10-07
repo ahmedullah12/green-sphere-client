@@ -8,6 +8,7 @@ import { Button } from "@nextui-org/button";
 import Link from "next/link";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
   const {
@@ -26,6 +27,11 @@ export default function RegisterPage() {
   };
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    if(!selectedImage){
+      return toast.error("Please upload a picture")
+    }
+
+
     const formData = new FormData();
     const userData = {
       ...data,
@@ -53,10 +59,10 @@ export default function RegisterPage() {
       <h3 className="my-2 text-xl font-bold text-center">Register with GreenSphere</h3>
         <GSForm onSubmit={onSubmit}>
           <div className="py-3">
-            <GSInput label="Name" name="name" size="sm" />
+            <GSInput label="Name" name="name" size="sm" required={true}/>
           </div>
           <div className="py-3">
-            <GSInput label="Email" name="email" size="sm" />
+            <GSInput label="Email" name="email" size="sm" required={true}/>
           </div>
           <div className="min-w-fit flex-1">
             <label
@@ -79,6 +85,7 @@ export default function RegisterPage() {
               name="password"
               size="sm"
               type="password"
+              required={true}
             />
           </div>
 

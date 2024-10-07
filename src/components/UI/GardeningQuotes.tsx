@@ -34,7 +34,7 @@ export default function GardeningQuotes() {
   };
 
   return (
-    <div className="bg-[#c1f8d5] dark:bg-default p-6 rounded-lg shadow-lg max-w-2xl mx-auto my-12">
+    <div className="bg-[#c1f8d5] dark:bg-gray-600 p-6 rounded-lg shadow-lg max-w-2xl mx-auto my-12">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center">
           <Leaf className="text-primary dark:text-white mr-2" size={24} />

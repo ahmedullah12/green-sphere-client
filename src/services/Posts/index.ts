@@ -1,10 +1,10 @@
 "use server";
 
-
 import envConfig from "@/src/config/envConfig";
+import axiosInstance from "@/src/lib/AxiosInstance";
+import { revalidateTag } from "next/cache";
 
 export const getPost = async (postId: string) => {
-  console.log(postId);
   let fetchOptions = {};
 
   fetchOptions = {
@@ -18,4 +18,21 @@ export const getPost = async (postId: string) => {
   }
 
   return res.json();
+};
+
+
+export const createPost = async (formData: FormData) => {
+  try {
+    const { data } = await axiosInstance.post("/posts/create-post", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    revalidateTag("posts");
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
 };
