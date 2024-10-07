@@ -2,7 +2,9 @@
 
 import envConfig from "@/src/config/envConfig";
 import axiosInstance from "@/src/lib/AxiosInstance";
+import { IPost } from "@/src/types";
 import { revalidateTag } from "next/cache";
+import { FieldValues } from "react-hook-form";
 
 export const getPost = async (postId: string) => {
   let fetchOptions = {};
@@ -28,6 +30,18 @@ export const createPost = async (formData: FormData) => {
         "Content-Type": "multipart/form-data",
       },
     });
+
+    revalidateTag("posts");
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
+};
+
+export const updatePost = async (postId: string, postData: FieldValues) => {
+  try {
+    const { data } = await axiosInstance.put(`/posts/${postId}`, postData);
 
     revalidateTag("posts");
 

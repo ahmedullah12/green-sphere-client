@@ -1,5 +1,6 @@
-"use client";
+"use client"
 
+import { useState, useEffect, useRef } from "react";
 import { IPost } from "@/src/types";
 import { Avatar } from "@nextui-org/avatar";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
@@ -7,42 +8,39 @@ import { Divider } from "@nextui-org/divider";
 import { Image } from "@nextui-org/image";
 import Link from "next/link";
 import { BiUpvote, BiDownvote, BiComment, BiShare } from "react-icons/bi";
-
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { Button } from "@nextui-org/button";
 import LightGallery from "lightgallery/react";
-
-// import styles
 import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-zoom.css";
 import "lightgallery/css/lg-thumbnail.css";
-
 import lgThumbnail from "lightgallery/plugins/thumbnail";
 import lgZoom from "lightgallery/plugins/zoom";
 import { useUser } from "@/src/context/user.provider";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.bubble.css';
+import EditPostModal from "../../modals/EditPostModal";
 
-interface IProps {
-  post: IPost;
-}
-
-const Post = ({ post }: IProps) => {
-  const {
-    _id,
-    title,
-    image,
-    tag,
-    userId,
-    description,
-    category,
-    upvotes,
-    downvotes,
-  } = post || {};
-
+const Post = ({ post }: { post: IPost }) => {
+  const { _id, title, image, tag, userId, category, upvotes, downvotes } = post || {};
+  const [showEditOptions, setShowEditOptions] = useState(false);
   const { user } = useUser();
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowEditOptions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <Card className="py-4">
-      <CardHeader className="pb-0 pt-2 px-4 flex items-center justify-between ">
+      <CardHeader className="pb-0 pt-2 px-4 flex items-center justify-between">
         <div className="flex gap-5">
           <Avatar
             isBordered
@@ -56,11 +54,31 @@ const Post = ({ post }: IProps) => {
             </h4>
           </div>
         </div>
-        {tag === "PREMIUM" && (
-          <p className="px-2 py-1 bg-primary dark:bg-gray-500 text-white text-xs rounded-md">
-            Premium
-          </p>
-        )}
+        <div className="flex items-center gap-2">
+          {tag === "PREMIUM" && (
+            <p className="px-2 py-1 bg-primary dark:bg-gray-500 text-white text-xs rounded-md">
+              Premium
+            </p>
+          )}
+          {user?._id === userId._id && (
+            <div className="relative" ref={menuRef}>
+              <button
+                onClick={() => setShowEditOptions(!showEditOptions)}
+                className="hover:cursor-pointer"
+              >
+                <BsThreeDotsVertical />
+              </button>
+              {showEditOptions && (
+                <div className="absolute top-[25px] right-0 flex flex-col gap-2 shadow-lg bg-green-50 px-4 py-2 z-50 rounded-md">
+                  <EditPostModal postData={post}/>
+                  <Button size="sm" className="bg-red-500 text-xs text-white">
+                    Delete
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </CardHeader>
 
       <CardBody className="overflow-visible py-2 px-0">
@@ -70,7 +88,7 @@ const Post = ({ post }: IProps) => {
               <Link href={image} data-src={image}>
                 <Image
                   alt="Card background"
-                  className="object-cover rounded-none"
+                  className="object-cover rounded-none z-0"
                   src={image}
                   width="100%"
                 />
@@ -93,17 +111,10 @@ const Post = ({ post }: IProps) => {
               </p>
             ))}
           </div>
-          {/* <p className="text-gray-700 text-sm">{description}</p> */}
-          <ReactQuill
-            value={description}
-            readOnly={true}
-            theme="bubble"
-            className="text-gray-700 text-sm"
-          />
         </div>
       </CardBody>
 
-      <Divider className=" my-2" />
+      <Divider className="my-2" />
 
       <CardFooter className="flex justify-between items-center px-4">
         <div className="flex items-center space-x-4">

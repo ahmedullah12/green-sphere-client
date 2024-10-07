@@ -19,7 +19,7 @@ const NewsFeed = async ({ searchParams }: { searchParams: { [key: string]: strin
       searchTerm: params.get("searchTerm"),
       category: params.get("category"),
       page: 1,
-      limit: 1,
+      limit: 2,
     },
   });
   const initialPosts = await res.data.data;

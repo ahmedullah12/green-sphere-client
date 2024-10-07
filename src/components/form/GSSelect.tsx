@@ -5,6 +5,7 @@ import { useFormContext } from "react-hook-form";
 interface IProps extends IInput {
   options: { key: string; label: string }[];
   selectionMode: "single" | "none" | "multiple";
+  value?: string[];
 }
 
 const GSSelect = ({
@@ -13,8 +14,10 @@ const GSSelect = ({
   label,
   variant = "bordered",
   disabled,
+  required=false,
   selectionMode,
   size= "sm",
+  value=[]
 }: IProps) => {
   const { register } = useFormContext();
   return (
@@ -25,6 +28,8 @@ const GSSelect = ({
       isDisabled={disabled}
       selectionMode={selectionMode}
       size={size}
+      isRequired={required}
+      defaultSelectedKeys={value}
     >
       {options?.map((option) => (
         <SelectItem key={option.key}>{option.label}</SelectItem>

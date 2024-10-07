@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -11,8 +11,8 @@ import { useUser } from "@/src/context/user.provider";
 
 export function LoadMoreNewsFeed({ initialPosts }: { initialPosts: IPost[] }) {
   const { user } = useUser();
-  const [posts, setPosts] = useState<IPost[]>(filterPremiumPosts(initialPosts, user?.isVerified));
-  const [page, setPage] = useState(2);
+  const [posts, setPosts] = useState<IPost[]>([]);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const searchParams = useSearchParams();
@@ -26,40 +26,64 @@ export function LoadMoreNewsFeed({ initialPosts }: { initialPosts: IPost[] }) {
     return posts.filter(post => !post.tag || post.tag !== "PREMIUM" || isVerified);
   }
 
-  const loadMorePosts = async () => {
-    if (loading || !hasMore) return;
+  const fetchPosts = async (currentPage: number, limit: number) => {
+    const res = await axios.get("http://localhost:5000/api/posts", {
+      params: {
+        sortBy: searchParams.get("sortBy") || "-createdAt",
+        searchTerm: searchParams.get("searchTerm"),
+        category: searchParams.get("category"),
+        page: currentPage,
+        limit,
+      },
+    });
+    return res.data.data;
+  };
+
+  const loadMorePosts = async (initialLoad = false) => {
+    if (loading || (!hasMore && !initialLoad)) return;
 
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/posts", {
-        params: {
-          sortBy: searchParams.get("sortBy") || "-createdAt",
-          searchTerm: searchParams.get("searchTerm"),
-          category: searchParams.get("category"),
-          page,
-          limit: 10,
-        },
-      });
+      let newPosts: IPost[] = [];
+      let currentPage = initialLoad ? 1 : page;
+      const postsPerPage = 2; // Adjust this value as needed
 
-      const newPosts = filterPremiumPosts(res.data.data, user?.isVerified);
+      while (newPosts.length < postsPerPage && hasMore) {
+        const fetchedPosts = await fetchPosts(currentPage, postsPerPage);
+        if (fetchedPosts.length === 0) {
+          setHasMore(false);
+          break;
+        }
 
-      if (newPosts.length === 0) {
-        setHasMore(false);
-      } else {
-        setPosts((prevPosts) => [...prevPosts, ...newPosts]);
-        setPage((prevPage) => prevPage + 1);
+        const filteredPosts = filterPremiumPosts(fetchedPosts, user?.isVerified);
+        newPosts = [...newPosts, ...filteredPosts];
+        currentPage++;
       }
 
-      // If we filtered out all posts, try to load more
-      if (res.data.data.length > 0 && newPosts.length === 0) {
-        loadMorePosts();
+      if (newPosts.length > 0) {
+        setPosts((prevPosts) => [...(initialLoad ? [] : prevPosts), ...newPosts]);
+        setPage(currentPage);
+      } else if (!hasMore) {
+        setHasMore(false);
       }
     } catch (error) {
-      console.error("Failed to load more posts:", error);
+      console.error("Failed to load posts:", error);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Initial load
+    const filteredInitialPosts = filterPremiumPosts(initialPosts, user?.isVerified);
+    if (filteredInitialPosts.length > 0) {
+      setPosts(filteredInitialPosts);
+      setPage(2);
+    } else {
+      // If no initial posts pass the filter, fetch more
+      loadMorePosts(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (inView && !loading && hasMore) {
@@ -69,30 +93,7 @@ export function LoadMoreNewsFeed({ initialPosts }: { initialPosts: IPost[] }) {
 
   useEffect(() => {
     // Reset posts and page when filters change
-    const fetchInitialPosts = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get("http://localhost:5000/api/posts", {
-          params: {
-            sortBy: searchParams.get("sortBy") || "-createdAt",
-            searchTerm: searchParams.get("searchTerm"),
-            category: searchParams.get("category"),
-            page: 1,
-            limit: 10,
-          },
-        });
-        const filteredPosts = filterPremiumPosts(res.data.data, user?.isVerified);
-        setPosts(filteredPosts);
-        setPage(2);
-        setHasMore(filteredPosts.length > 0);
-      } catch (error) {
-        console.error("Failed to fetch initial posts:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchInitialPosts();
+    loadMorePosts(true);
   }, [searchParams, user?.isVerified]);
 
   return (
@@ -106,7 +107,8 @@ export function LoadMoreNewsFeed({ initialPosts }: { initialPosts: IPost[] }) {
         className="flex justify-center items-center h-20 my-4"
       >
         {loading && <Spinner />}
-        {!hasMore && <p>No more posts to load</p>}
+        {!hasMore && posts.length === 0 && <p>No posts available</p>}
+        {!hasMore && posts.length > 0 && <p>No more posts to load</p>}
       </div>
     </>
   );

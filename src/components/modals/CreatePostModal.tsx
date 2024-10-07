@@ -17,7 +17,7 @@ const CreatePostModal = () => {
 
   const { user } = useUser();
 
-  const {mutate: handleCreatePost, } = useCreatePost()
+  const { mutate: handleCreatePost, isPending } = useCreatePost();
 
   const categoryOptions = Object.entries(POST_CATEGORY).map((category) => ({
     key: category[1],
@@ -39,7 +39,7 @@ const CreatePostModal = () => {
 
     const postData = {
       title: data.title,
-      category: data.categories.split(","),
+      category: data?.categories.split(","),
       tag: data.tag,
       userId: user?._id,
       description: data.description,
@@ -61,7 +61,7 @@ const CreatePostModal = () => {
     >
       <GSForm onSubmit={handleSubmit}>
         <div className="py-3">
-          <GSInput label="Title" name="title" size="sm" />
+          <GSInput label="Title" name="title" size="sm" required={true} />
         </div>
         <div className="py-3">
           <GSSelect
@@ -69,6 +69,7 @@ const CreatePostModal = () => {
             label="Select Categories"
             selectionMode="multiple"
             options={categoryOptions}
+            required={true}
           />
         </div>
         <div className="py-3">
@@ -77,6 +78,7 @@ const CreatePostModal = () => {
             label="Select Tag"
             selectionMode="single"
             options={tagsOptions}
+            required={true}
           />
         </div>
 
@@ -108,8 +110,9 @@ const CreatePostModal = () => {
           className="my-3 w-full bg-primary dark:bg-default text-white rounded-md"
           size="lg"
           type="submit"
+          isDisabled={isPending}
         >
-          Create
+          {isPending ? "Creating..." : "Create"}
         </Button>
       </GSForm>
     </GSModal>
