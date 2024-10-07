@@ -40,6 +40,24 @@ export const loginUser = async (userData: FieldValues) => {
   }
 };
 
+export const getNewAccessToken = async () => {
+  try {
+    const refreshToken = cookies().get("refreshToken")?.value;
+    const res = await axiosInstance({
+      url: "/auth/refreshToken",
+      method: "POST",
+      withCredentials: true,
+      headers: {
+        cookies: `refreshToken=${refreshToken}`,
+      },
+    });
+
+    return res.data;
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
+};
+
 export const changePassword = async (userId: string, userData: FieldValues) => {
   try {
     const { data } = await axiosInstance.put(

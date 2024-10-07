@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect, useRef } from "react";
 import { IPost } from "@/src/types";
@@ -18,26 +18,85 @@ import lgZoom from "lightgallery/plugins/zoom";
 import { useUser } from "@/src/context/user.provider";
 import EditPostModal from "../../modals/EditPostModal";
 import DeletePostModal from "../../modals/DeletePostModal";
+import { useDownvotePost, useUpvotePost } from "@/src/hooks/posts.hooks";
+import { BiSolidDownvote } from "react-icons/bi";
+import { BiSolidUpvote } from "react-icons/bi";
 
 const Post = ({ post }: { post: IPost }) => {
-  const { _id, title, image, tag, userId, category, upvotes, downvotes } = post || {};
-  const [showEditOptions, setShowEditOptions] = useState(false);
-  const { user } = useUser();
-  const menuRef = useRef<HTMLDivElement>(null);
+  let { _id, title, image, tag, userId, category, upvotes, downvotes } =
+  post || {};
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowEditOptions(false);
-      }
-    };
+const [showEditOptions, setShowEditOptions] = useState(false);
+const { user } = useUser();
+const menuRef = useRef<HTMLDivElement>(null);
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+const { mutate: handleUpvotePost } = useUpvotePost();
+const { mutate: handleDownvotePost } = useDownvotePost();
 
+useEffect(() => {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setShowEditOptions(false);
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
+
+const handleUpvote = () => {
+  if (user?._id === userId._id) {
+    return;
+  }
+
+  const isDownvoted = downvotes.includes(user?._id as string);
+
+  if (isDownvoted) {
+    post.downvotes = downvotes.filter((id) => id !== user?._id);
+  }
+
+  const isUpvoted = upvotes.includes(user?._id as string);
+
+  if (isUpvoted) {
+    post.upvotes = upvotes.filter((id) => id !== user?._id);
+  } else if (!isDownvoted) {
+    post.upvotes.push(user?._id as string);
+  }
+
+  handleUpvotePost({ postId: post._id, userId: user?._id as string });
+
+  setTimeout(() => {
+    post = { ...post };
+  }, 0);
+};
+
+const handleDownvote = () => {
+  if (user?._id === userId._id) {
+    return;
+  }
+
+  const isUpvoted = upvotes.includes(user?._id as string);
+  const isDownvoted = downvotes.includes(user?._id as string);
+
+  if (isUpvoted) {
+    post.upvotes = upvotes.filter((id) => id !== user?._id);
+  }
+
+  if (isDownvoted) {
+    post.downvotes = downvotes.filter((id) => id !== user?._id);
+  } else if (!isUpvoted) {
+    post.downvotes.push(user?._id as string);
+  }
+
+  handleDownvotePost({ postId: post._id, userId: user?._id as string });
+
+  setTimeout(() => {
+    post = { ...post };
+  }, 0);
+};
+  
   return (
     <Card className="py-4">
       <CardHeader className="pb-0 pt-2 px-4 flex items-center justify-between">
@@ -70,8 +129,8 @@ const Post = ({ post }: { post: IPost }) => {
               </button>
               {showEditOptions && (
                 <div className="absolute top-[25px] right-0 flex flex-col gap-2 shadow-lg bg-green-50 dark:bg-gray-500 px-4 py-2 z-50 rounded-md">
-                  <EditPostModal postData={post}/>
-                  <DeletePostModal postId={post._id}/>
+                  <EditPostModal postData={post} />
+                  <DeletePostModal postId={post._id} />
                 </div>
               )}
             </div>
@@ -116,12 +175,26 @@ const Post = ({ post }: { post: IPost }) => {
 
       <CardFooter className="flex justify-between items-center px-4">
         <div className="flex items-center space-x-4">
-          <button className="flex items-center space-x-1 text-gray-500 hover:text-blue-500 transition-colors">
-            <BiUpvote className="text-xl" />
+          <button
+            onClick={handleUpvote}
+            className="flex items-center space-x-1 text-gray-500  transition-colors"
+          >
+            {upvotes.includes(user?._id as string) ? (
+              <BiSolidUpvote  className="text-xl " />
+            ) : (
+              <BiUpvote className="text-xl" />
+            )}
             <span className="text-sm">{upvotes.length}</span>
           </button>
-          <button className="flex items-center space-x-1 text-gray-500 hover:text-red-500 transition-colors">
-            <BiDownvote className="text-xl" />
+          <button
+            onClick={handleDownvote}
+            className="flex items-center space-x-1 text-gray-500 transition-colors"
+          >
+            {downvotes.includes(user?._id as string) ? (
+              <BiSolidDownvote className="text-xl" />
+            ) : (
+              <BiDownvote className="text-xl" />
+            )}
             <span className="text-sm">{downvotes.length}</span>
           </button>
         </div>

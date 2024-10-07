@@ -2,10 +2,8 @@
 
 import envConfig from "@/src/config/envConfig";
 import axiosInstance from "@/src/lib/AxiosInstance";
-import { IPost } from "@/src/types";
 import { revalidateTag } from "next/cache";
 import { FieldValues } from "react-hook-form";
-import { StringDecoder } from "string_decoder";
 
 export const getPost = async (postId: string) => {
   let fetchOptions = {};
@@ -56,6 +54,42 @@ export const deletePost = async (postId: string) => {
     const { data } = await axiosInstance.delete(`/posts/${postId}`);
 
     revalidateTag("posts");
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
+};
+
+export const getSinglePost = async (postId: string) => {
+  try {
+    const { data } = await axiosInstance.get(`/posts/${postId}`);
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
+};
+
+ export const getPosts = async (params: any) => {
+  const res = await axiosInstance.get("/posts", {
+    params,
+  });
+  return res.data.data;
+};
+
+export const upvotePost = async (postId: string, userId: string) => {
+  try {
+    const { data } = await axiosInstance.put(`/posts/action/upvote-post?postId=${postId}&userId=${userId}`);
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
+};
+export const downvotePost = async (postId: string, userId: string) => {
+  try {
+    const { data } = await axiosInstance.put(`/posts/action/downvote-post?postId=${postId}&userId=${userId}`);
 
     return data;
   } catch (err: any) {
