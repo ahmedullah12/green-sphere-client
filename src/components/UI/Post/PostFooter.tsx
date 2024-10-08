@@ -8,7 +8,6 @@ import { BiSolidDownvote, BiSolidUpvote } from "react-icons/bi";
 import { BiUpvote, BiDownvote, BiComment, BiShare } from "react-icons/bi";
 import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
-import envConfig from "@/src/config/envConfig";
 
 const PostFooter = ({ post, user }: { post: IPost; user: IUser }) => {
   const { _id, userId, upvotes, downvotes } = post || {};

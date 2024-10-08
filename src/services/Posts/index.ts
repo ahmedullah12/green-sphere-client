@@ -21,7 +21,6 @@ export const getPost = async (postId: string) => {
   return res.json();
 };
 
-
 export const createPost = async (formData: FormData) => {
   try {
     const { data } = await axiosInstance.post("/posts/create-post", formData, {
@@ -71,7 +70,7 @@ export const getSinglePost = async (postId: string) => {
   }
 };
 
- export const getPosts = async (params: any) => {
+export const getPosts = async (params: any) => {
   const res = await axiosInstance.get("/posts", {
     params,
   });
@@ -80,7 +79,9 @@ export const getSinglePost = async (postId: string) => {
 
 export const upvotePost = async (postId: string, userId: string) => {
   try {
-    const { data } = await axiosInstance.put(`/posts/action/upvote-post?postId=${postId}&userId=${userId}`);
+    const { data } = await axiosInstance.put(
+      `/posts/action/upvote-post?postId=${postId}&userId=${userId}`
+    );
 
     return data;
   } catch (err: any) {
@@ -89,10 +90,26 @@ export const upvotePost = async (postId: string, userId: string) => {
 };
 export const downvotePost = async (postId: string, userId: string) => {
   try {
-    const { data } = await axiosInstance.put(`/posts/action/downvote-post?postId=${postId}&userId=${userId}`);
+    const { data } = await axiosInstance.put(
+      `/posts/action/downvote-post?postId=${postId}&userId=${userId}`
+    );
 
     return data;
   } catch (err: any) {
     throw new Error(err.message);
   }
+};
+
+export const getRecentPosts = async () => {
+  const fetchOptions = {
+    next: {
+      tags: ["posts"],
+    },
+  };
+  const res = await fetch(
+    `${envConfig.baseApi}/posts?sortBy=-createdAt&limit=4`,
+    fetchOptions
+  );
+
+  return res.json();
 };

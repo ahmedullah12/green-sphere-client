@@ -39,7 +39,7 @@ export default function GSRichTextEditor({ name, label, required }: IProps) {
         )}
       />
       {errors[name] && (
-        <p className="text-red-500 text-sm">{errors[name].message as string}</p>
+        <p className="text-red-500 text-sm">{errors[name]?.message as string}</p>
       )}
     </div>
   );
