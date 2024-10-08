@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { IPost } from "@/src/types";
+import React, { useState } from "react";
 import { Avatar } from "@nextui-org/avatar";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Image } from "@nextui-org/image";
 import Link from "next/link";
-import { BiUpvote, BiDownvote, BiComment, BiShare } from "react-icons/bi";
+
 import { BsThreeDotsVertical } from "react-icons/bs";
+
 import LightGallery from "lightgallery/react";
 import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-zoom.css";
@@ -18,85 +18,15 @@ import lgZoom from "lightgallery/plugins/zoom";
 import { useUser } from "@/src/context/user.provider";
 import EditPostModal from "../../modals/EditPostModal";
 import DeletePostModal from "../../modals/DeletePostModal";
-import { useDownvotePost, useUpvotePost } from "@/src/hooks/posts.hooks";
-import { BiSolidDownvote } from "react-icons/bi";
-import { BiSolidUpvote } from "react-icons/bi";
+import { IPost, IUser } from "@/src/types";
+import PostFooter from "./PostFooter";
 
 const Post = ({ post }: { post: IPost }) => {
-  let { _id, title, image, tag, userId, category, upvotes, downvotes } =
-  post || {};
+  const { _id, title, image, tag, userId, category } = post || {};
+  const [showEditOptions, setShowEditOptions] = useState(false);
 
-const [showEditOptions, setShowEditOptions] = useState(false);
-const { user } = useUser();
-const menuRef = useRef<HTMLDivElement>(null);
+  const { user } = useUser();
 
-const { mutate: handleUpvotePost } = useUpvotePost();
-const { mutate: handleDownvotePost } = useDownvotePost();
-
-useEffect(() => {
-  const handleClickOutside = (event: MouseEvent) => {
-    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-      setShowEditOptions(false);
-    }
-  };
-
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-  };
-}, []);
-
-const handleUpvote = () => {
-  if (user?._id === userId._id) {
-    return;
-  }
-
-  const isDownvoted = downvotes.includes(user?._id as string);
-
-  if (isDownvoted) {
-    post.downvotes = downvotes.filter((id) => id !== user?._id);
-  }
-
-  const isUpvoted = upvotes.includes(user?._id as string);
-
-  if (isUpvoted) {
-    post.upvotes = upvotes.filter((id) => id !== user?._id);
-  } else if (!isDownvoted) {
-    post.upvotes.push(user?._id as string);
-  }
-
-  handleUpvotePost({ postId: post._id, userId: user?._id as string });
-
-  setTimeout(() => {
-    post = { ...post };
-  }, 0);
-};
-
-const handleDownvote = () => {
-  if (user?._id === userId._id) {
-    return;
-  }
-
-  const isUpvoted = upvotes.includes(user?._id as string);
-  const isDownvoted = downvotes.includes(user?._id as string);
-
-  if (isUpvoted) {
-    post.upvotes = upvotes.filter((id) => id !== user?._id);
-  }
-
-  if (isDownvoted) {
-    post.downvotes = downvotes.filter((id) => id !== user?._id);
-  } else if (!isUpvoted) {
-    post.downvotes.push(user?._id as string);
-  }
-
-  handleDownvotePost({ postId: post._id, userId: user?._id as string });
-
-  setTimeout(() => {
-    post = { ...post };
-  }, 0);
-};
-  
   return (
     <Card className="py-4">
       <CardHeader className="pb-0 pt-2 px-4 flex items-center justify-between">
@@ -120,7 +50,7 @@ const handleDownvote = () => {
             </p>
           )}
           {user?._id === userId._id && (
-            <div className="relative" ref={menuRef}>
+            <div className="relative">
               <button
                 onClick={() => setShowEditOptions(!showEditOptions)}
                 className="hover:cursor-pointer"
@@ -173,41 +103,8 @@ const handleDownvote = () => {
 
       <Divider className="my-2" />
 
-      <CardFooter className="flex justify-between items-center px-4">
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={handleUpvote}
-            className="flex items-center space-x-1 text-gray-500  transition-colors"
-          >
-            {upvotes.includes(user?._id as string) ? (
-              <BiSolidUpvote  className="text-xl " />
-            ) : (
-              <BiUpvote className="text-xl" />
-            )}
-            <span className="text-sm">{upvotes.length}</span>
-          </button>
-          <button
-            onClick={handleDownvote}
-            className="flex items-center space-x-1 text-gray-500 transition-colors"
-          >
-            {downvotes.includes(user?._id as string) ? (
-              <BiSolidDownvote className="text-xl" />
-            ) : (
-              <BiDownvote className="text-xl" />
-            )}
-            <span className="text-sm">{downvotes.length}</span>
-          </button>
-        </div>
-        <div className="flex items-center space-x-4">
-          <button className="flex items-center space-x-1 text-gray-500 hover:text-green-500 transition-colors">
-            <BiComment className="text-xl" />
-            <span className="text-sm">Comment</span>
-          </button>
-          <button className="flex items-center space-x-1 text-gray-500 hover:text-purple-500 transition-colors">
-            <BiShare className="text-xl" />
-            <span className="text-sm">Share</span>
-          </button>
-        </div>
+      <CardFooter className="flex flex-col px-4">
+        <PostFooter post={post} user={user as IUser} />
       </CardFooter>
     </Card>
   );

@@ -45,3 +45,10 @@ export interface IInput {
   name: string;
   disabled?: boolean;
 }
+
+export interface IComment {
+  _id: string;
+  comment: string;
+  postId: string;
+  userId: IUser;
+}

@@ -34,7 +34,7 @@ const EditPostModal = ({ postData }: IProps) => {
     const newData = {
         title: data.title,
         description: data.description,
-        category: data.categories.split(","),
+        category: data.categories,
         tag: data.tag,
         userId: postData.userId._id,
     }
