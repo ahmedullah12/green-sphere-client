@@ -113,3 +113,18 @@ export const getRecentPosts = async () => {
 
   return res.json();
 };
+
+
+export const getMyPosts = async (userId: string) => {
+  const fetchOptions = {
+    next: {
+      tags: ["posts"],
+    },
+  };
+  const res = await fetch(
+    `${envConfig.baseApi}/posts/my-posts/${userId}`,
+    fetchOptions
+  );
+
+  return res.json();
+};
