@@ -27,7 +27,7 @@ export function LoadMoreNewsFeed({ initialPosts }: { initialPosts: IPost[] }) {
   }
 
   const fetchPosts = async (currentPage: number, limit: number) => {
-    const res = await axios.get("http://localhost:5000/api/posts", {
+    const res = await axios.get("https://assignment-6-server-six.vercel.app/api/posts", {
       params: {
         sortBy: searchParams.get("sortBy") || "-createdAt",
         searchTerm: searchParams.get("searchTerm"),
