@@ -1,4 +1,3 @@
-
 import { IPost } from "@/src/types";
 import Container from "@/src/components/UI/Container";
 import Link from "next/link";
@@ -7,8 +6,13 @@ import { getRecentPosts } from "@/src/services/Posts";
 import PostCard from "../../_components/shared/PostCard";
 
 export default async function LatestPosts() {
-  const { data: posts } = await getRecentPosts();
-  console.log(posts);
+  const { data: allPosts } = await getRecentPosts();
+
+  // Filter out premium posts and limit to 4
+  const posts = allPosts
+    ?.filter((post: IPost) => post.tag !== "PREMIUM")
+    .slice(0, 4);
+
   return (
     <Container>
       <div className="mb-14">

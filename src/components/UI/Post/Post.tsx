@@ -86,7 +86,7 @@ const Post = ({ post }: { post: IPost }) => {
 
         <div className="px-2">
           <p className="ps-4 text-xl font-medium mt-3 mb-1 hover:underline">
-            <Link href={`/news-feed/${_id}`}>{title}</Link>
+            <Link href={`/news-feed/post/${_id}`}>{title}</Link>
           </p>
           <div className="ps-4 flex gap-2 my-2">
             {category.map((item, index) => (

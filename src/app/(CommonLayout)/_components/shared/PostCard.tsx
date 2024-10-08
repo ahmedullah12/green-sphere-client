@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { IPost } from "@/src/types";
 import { Avatar } from "@nextui-org/avatar";
@@ -20,7 +20,7 @@ interface IProps {
   post: IPost;
 }
 const PostCard = ({ post }: IProps) => {
-  const { title, image, userId, description } = post || {};
+  const { _id, title, image, userId, description } = post || {};
 
   const truncateText = (text: string, length: number) => {
     if (text.length > length) {
@@ -73,13 +73,15 @@ const PostCard = ({ post }: IProps) => {
       )}
 
       <CardFooter className="flex justify-end">
-        <Button
-          className="text-tiny bg-primary dark:bg-default text-white"
-          radius="lg"
-          size="sm"
-        >
-          See Details
-        </Button>
+        <Link href={`/news-feed/post/${_id}`}>
+          <Button
+            className="text-tiny bg-primary dark:bg-default text-white"
+            radius="lg"
+            size="sm"
+          >
+            See Details
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );
