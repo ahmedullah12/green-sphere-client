@@ -10,15 +10,23 @@ import { useGetMyPosts } from "@/src/hooks/posts.hooks";
 import { MdVerified } from "react-icons/md";
 import Loading from "@/src/components/UI/Loading";
 import EditProfileModal from "@/src/components/modals/EditProfileModal";
+import { useFollowUser, useUnfollowUser } from "@/src/hooks/user.hooks";
+import toast from "react-hot-toast";
 
 interface ProfileSidebarProps {
   profileUser: IUser | null;
   isLoading: boolean;
   isError: boolean;
+  refetch?: any;
 }
 
-const ProfileSidebar = ({ profileUser, isLoading, isError }: ProfileSidebarProps) => {
-  const { user: currentUser } = useUser();
+const ProfileSidebar = ({
+  profileUser,
+  isLoading,
+  isError,
+  refetch,
+}: ProfileSidebarProps) => {
+  const { user: currentUser, setUser: setCurrentUser } = useUser();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [canVerify, setCanVerify] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -26,6 +34,9 @@ const ProfileSidebar = ({ profileUser, isLoading, isError }: ProfileSidebarProps
   const isOwnProfile = profileUser?._id === currentUser?._id;
 
   const { data: posts } = useGetMyPosts(profileUser?._id as string);
+
+  const { mutate: handleFollow } = useFollowUser();
+  const { mutate: handleUnfollow } = useUnfollowUser();
 
   useEffect(() => {
     if (posts?.data) {
@@ -36,6 +47,59 @@ const ProfileSidebar = ({ profileUser, isLoading, isError }: ProfileSidebarProps
     }
   }, [posts]);
 
+  const updateCurrentUserAfterFollow = (followedUserId: string) => {
+    if (currentUser) {
+      setCurrentUser({
+        ...currentUser,
+        following: [...currentUser.following, { _id: followedUserId } as IUser],
+      });
+    }
+  };
+
+  const updateCurrentUserAfterUnfollow = (unfollowedUserId: string) => {
+    if (currentUser) {
+      setCurrentUser({
+        ...currentUser,
+        following: currentUser.following.filter((user) => user._id !== unfollowedUserId),
+      });
+    }
+  };
+
+  const handleFollowUser = () => {
+    handleFollow(
+      {
+        userId: currentUser?._id as string,
+        followedUserId: profileUser?._id as string,
+      },
+      {
+        onSuccess: () => {
+          toast.success("User Followed");
+          setIsFollowing(true);
+          updateCurrentUserAfterFollow(profileUser?._id as string);
+          refetch();
+        },
+      }
+    );
+  };
+
+  const handleUnfollowUser = () => {
+    handleUnfollow(
+      {
+        userId: currentUser?._id as string,
+        followedUserId: profileUser?._id as string,
+      },
+      {
+        onSuccess: () => {
+          toast.success("User Unfollowed");
+          setIsFollowing(false);
+          updateCurrentUserAfterUnfollow(profileUser?._id as string);
+          refetch();
+        },
+      }
+    );
+  };
+
+
   useEffect(() => {
     if (currentUser && profileUser && !isOwnProfile) {
       setIsFollowing(
@@ -43,10 +107,6 @@ const ProfileSidebar = ({ profileUser, isLoading, isError }: ProfileSidebarProps
       );
     }
   }, [currentUser, profileUser, isOwnProfile]);
-
-  const handleFollowToggle = () => {
-    setIsFollowing(!isFollowing);
-  };
 
   const renderUserList = (users: IUser[], type: string) => (
     <div>
@@ -87,7 +147,11 @@ const ProfileSidebar = ({ profileUser, isLoading, isError }: ProfileSidebarProps
   }
 
   if (isError) {
-    return <div className="text-red-500 p-4">Error loading profile. Please try again later.</div>;
+    return (
+      <div className="text-red-500 p-4">
+        Error loading profile. Please try again later.
+      </div>
+    );
   }
 
   if (!profileUser) {
@@ -113,48 +177,48 @@ const ProfileSidebar = ({ profileUser, isLoading, isError }: ProfileSidebarProps
               )}
             </h1>
             {isOwnProfile && !profileUser.isVerified && (
-              <Button
-                className="px-3 py-2 text-sm bg-blue-400 dark:bg-default text-white rounded-md"
+              <button
+                className="px-3 py-2 text-xs bg-blue-400 dark:bg-default text-white rounded-md disabled:bg-gray-200 disabled:dark:bg-gray-200"
                 disabled={!canVerify}
               >
                 Verify
-              </Button>
+              </button>
             )}
           </div>
           <p className="break-words text-sm">{profileUser.email}</p>
         </div>
-        {isOwnProfile ? (
+        {isOwnProfile && (
           <Button
             onClick={() => setIsEditOpen(!isEditOpen)}
             className="w-full mt-2 bg-primary dark:bg-gray-500 text-white"
           >
             Edit Profile
           </Button>
-        ) : (
-          <Button
-            onClick={handleFollowToggle}
-            className={`px-3 py-2 text-sm ${
-              isFollowing
-                ? "bg-gray-400 dark:bg-gray-600"
-                : "bg-blue-400 dark:bg-blue-600"
-            } text-white rounded-md`}
-          >
-            {isFollowing ? "Following" : "Follow"}
-          </Button>
         )}
+
+        {!isOwnProfile &&
+          (isFollowing ? (
+            <Button onClick={handleUnfollowUser}>Following</Button>
+          ) : (
+            <Button onClick={handleFollowUser}>Follow</Button>
+          ))}
       </div>
 
       {isOwnProfile && isEditOpen && (
         <div className="absolute left-0 right-0 bg-white dark:bg-gray-400 p-4 rounded-b-xl shadow-lg z-50">
           <h2 className="text-lg font-semibold mb-2">Profile Options</h2>
           <div className="space-y-2">
-            <EditProfileModal/>
-            <Button variant="solid" className="w-full">
-              Change Password
-            </Button>
-            <Button variant="solid" className="w-full">
-              Password Recovery
-            </Button>
+            <EditProfileModal />
+            <Link href={"/auth/change-password"}>
+              <Button variant="solid" className="w-full mt-2">
+                Change Password
+              </Button>
+            </Link>
+            <Link href="/auth/password-recovery">
+              <Button variant="solid" className="w-full mt-2">
+                Password Recovery
+              </Button>
+            </Link>
           </div>
         </div>
       )}

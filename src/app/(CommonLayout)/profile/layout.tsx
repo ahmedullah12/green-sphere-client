@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const userId = params.userId as string;
   const shouldFetchUser = userId && userId !== currentUser?._id;
   
-  const { data: userData, isLoading, error } = useGetUserData(shouldFetchUser ? userId : '');
+  const { data: userData, isLoading, error, refetch: userRefetch } = useGetUserData(shouldFetchUser ? userId : '');
 
   let profileUser: IUser | null = null;
   let isError = false;
@@ -40,6 +40,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             profileUser={profileUser} 
             isLoading={isLoading} 
             isError={isError}
+            refetch={userRefetch}
           />
         </div>
         <div className="w-full md:w-4/5">{children}</div>

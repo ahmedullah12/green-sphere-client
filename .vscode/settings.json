@@ -1,4 +1,4 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": ["Downvote", "downvotes", "Upvote", "upvotes"]
+  "cSpell.words": ["Downvote", "downvotes", "unfollow", "Upvote", "upvotes"]
 }

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 "use client";
 
 import { FieldValues, SubmitHandler } from "react-hook-form";
@@ -52,6 +53,7 @@ const EditProfileModal = () => {
         </div>
 
         <div className="min-w-fit flex-1">
+          <label className="text-xs font-medium mb-1">Change Image</label>
           <label
             className="flex h-12 w-full ps-3 cursor-pointer items-center justify-start rounded-lg border-2 border-default-200 text-sm text-default-500 shadow-sm transition-all duration-100 hover:border-default-400"
             htmlFor="image"
