@@ -38,9 +38,11 @@ const Post = ({ post }: { post: IPost }) => {
             src={userId?.profilePhoto}
           />
           <div className="flex flex-col gap-1 items-start justify-center">
-            <h4 className="text-small font-semibold leading-none text-default-600">
+            <Link href={`/profile/${userId?._id}`}>
+            <h4 className="text-small font-semibold leading-none text-default-600 hover:underline">
               {userId?.name}
             </h4>
+            </Link>
           </div>
         </div>
         <div className="flex items-center gap-2">

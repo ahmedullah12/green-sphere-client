@@ -52,3 +52,11 @@ export interface IComment {
   postId: string;
   userId: IUser;
 }
+
+export interface IPaymentPayload {
+  userId: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+}

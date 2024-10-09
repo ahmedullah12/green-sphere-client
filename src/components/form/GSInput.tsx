@@ -13,6 +13,7 @@ export default function GSInput({
   type = "text",
   label,
   name,
+  disabled,
 }: IProps) {
   const {
     register,
@@ -29,6 +30,7 @@ export default function GSInput({
       required={required}
       type={type}
       label={label}
+      isDisabled={disabled}
     />
   );
 }

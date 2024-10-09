@@ -23,6 +23,8 @@ interface IProps {
     | "ghost"
     | undefined;
   buttonClassName?: string;
+  buttonSize?: "sm" | "md" | "lg" | undefined;
+  disable?: boolean,
 }
 
 export default function GSModal({
@@ -30,13 +32,15 @@ export default function GSModal({
   children,
   title,
   buttonVariant = "solid",
-  buttonClassName
+  buttonClassName,
+  buttonSize="md",
+  disable,
 }: IProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <>
-      <Button className={buttonClassName} variant={buttonVariant} onPress={onOpen}>
+      <Button size={buttonSize} isDisabled={disable} className={buttonClassName} variant={buttonVariant} onPress={onOpen}>
         {buttonText}
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>

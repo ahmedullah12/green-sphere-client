@@ -12,6 +12,7 @@ import Loading from "@/src/components/UI/Loading";
 import EditProfileModal from "@/src/components/modals/EditProfileModal";
 import { useFollowUser, useUnfollowUser } from "@/src/hooks/user.hooks";
 import toast from "react-hot-toast";
+import CreatePaymentModal from "@/src/components/modals/CreatePaymentModal";
 
 interface ProfileSidebarProps {
   profileUser: IUser | null;
@@ -60,7 +61,9 @@ const ProfileSidebar = ({
     if (currentUser) {
       setCurrentUser({
         ...currentUser,
-        following: currentUser.following.filter((user) => user._id !== unfollowedUserId),
+        following: currentUser.following.filter(
+          (user) => user._id !== unfollowedUserId
+        ),
       });
     }
   };
@@ -98,7 +101,6 @@ const ProfileSidebar = ({
       }
     );
   };
-
 
   useEffect(() => {
     if (currentUser && profileUser && !isOwnProfile) {
@@ -177,12 +179,13 @@ const ProfileSidebar = ({
               )}
             </h1>
             {isOwnProfile && !profileUser.isVerified && (
-              <button
-                className="px-3 py-2 text-xs bg-blue-400 dark:bg-default text-white rounded-md disabled:bg-gray-200 disabled:dark:bg-gray-200"
-                disabled={!canVerify}
-              >
-                Verify
-              </button>
+              // <button
+              //   className="px-3 py-2 text-xs bg-blue-400 dark:bg-default text-white rounded-md disabled:bg-gray-200 disabled:dark:bg-gray-200"
+              //   disabled={!canVerify}
+              // >
+              //   Verify
+              // </button>
+              <CreatePaymentModal disable={!canVerify} />
             )}
           </div>
           <p className="break-words text-sm">{profileUser.email}</p>

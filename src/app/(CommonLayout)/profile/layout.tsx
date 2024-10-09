@@ -19,7 +19,6 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   let profileUser: IUser | null = null;
   let isError = false;
-  console.log(userData);
 
   if (shouldFetchUser) {
     if (error) {
