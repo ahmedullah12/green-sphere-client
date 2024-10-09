@@ -9,13 +9,15 @@ import { IPost, IUser } from "@/src/types";
 import { useGetMyPosts } from "@/src/hooks/posts.hooks";
 import { MdVerified } from "react-icons/md";
 import Loading from "@/src/components/UI/Loading";
+import EditProfileModal from "@/src/components/modals/EditProfileModal";
 
 interface ProfileSidebarProps {
   profileUser: IUser | null;
   isLoading: boolean;
+  isError: boolean;
 }
 
-const ProfileSidebar = ({ profileUser, isLoading }: ProfileSidebarProps) => {
+const ProfileSidebar = ({ profileUser, isLoading, isError }: ProfileSidebarProps) => {
   const { user: currentUser } = useUser();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [canVerify, setCanVerify] = useState(false);
@@ -36,7 +38,6 @@ const ProfileSidebar = ({ profileUser, isLoading }: ProfileSidebarProps) => {
 
   useEffect(() => {
     if (currentUser && profileUser && !isOwnProfile) {
-      console.log(currentUser);
       setIsFollowing(
         currentUser.following.some((f: IUser) => f._id === profileUser._id)
       );
@@ -85,8 +86,12 @@ const ProfileSidebar = ({ profileUser, isLoading }: ProfileSidebarProps) => {
     return <Loading />;
   }
 
+  if (isError) {
+    return <div className="text-red-500 p-4">Error loading profile. Please try again later.</div>;
+  }
+
   if (!profileUser) {
-    return <div>User not found</div>;
+    return <div className="p-4">User not found</div>;
   }
 
   return (
@@ -143,9 +148,7 @@ const ProfileSidebar = ({ profileUser, isLoading }: ProfileSidebarProps) => {
         <div className="absolute left-0 right-0 bg-white dark:bg-gray-400 p-4 rounded-b-xl shadow-lg z-50">
           <h2 className="text-lg font-semibold mb-2">Profile Options</h2>
           <div className="space-y-2">
-            <Button variant="solid" className="w-full">
-              Edit Profile
-            </Button>
+            <EditProfileModal/>
             <Button variant="solid" className="w-full">
               Change Password
             </Button>

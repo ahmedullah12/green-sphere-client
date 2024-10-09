@@ -1,46 +1,46 @@
 "use client";
 
 import Container from "@/src/components/UI/Container";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
 import ProfileSidebar from "./_components/ProfileSidebar";
 import { useParams } from "next/navigation";
 import { useUser } from "@/src/context/user.provider";
 import { IUser } from "@/src/types";
-import { getUserData } from "@/src/services/User";
-
-
+import { useGetUserData } from "@/src/hooks/user.hooks";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { user: currentUser } = useUser();
   const params = useParams();
-  const [profileUser, setProfileUser] = useState<IUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  
+  const userId = params.userId as string;
+  const shouldFetchUser = userId && userId !== currentUser?._id;
+  
+  const { data: userData, isLoading, error } = useGetUserData(shouldFetchUser ? userId : '');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      if (params.userId && params.userId !== currentUser?._id) {
-        try {
-          const userData = await getUserData(params.userId as string);
-          setProfileUser(userData.data);
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-          // Handle error (e.g., set an error state, show a message)
-        }
-      } else {
-        setProfileUser(currentUser);
-      }
-      setIsLoading(false);
-    };
+  let profileUser: IUser | null = null;
+  let isError = false;
+  console.log(userData);
 
-    fetchData();
-  }, [params.userId, currentUser]);
+  if (shouldFetchUser) {
+    if (error) {
+      console.error("Error fetching user data:", error);
+      isError = true;
+    } else {
+      profileUser = userData?.data || null;
+    }
+  } else {
+    profileUser = currentUser;
+  }
 
   return (
     <Container>
       <div className="my-3 flex flex-col md:flex-row w-full md:gap-12">
         <div className="w-full md:w-2/5 mb-6 md:mb-0">
-          <ProfileSidebar profileUser={profileUser} isLoading={isLoading} />
+          <ProfileSidebar 
+            profileUser={profileUser} 
+            isLoading={isLoading} 
+            isError={isError}
+          />
         </div>
         <div className="w-full md:w-4/5">{children}</div>
       </div>

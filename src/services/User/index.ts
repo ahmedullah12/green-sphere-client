@@ -1,10 +1,26 @@
-import axios from "axios";
+"use server";
+
+import axiosInstance from "@/src/lib/AxiosInstance";
 
 export const getUserData = async (postId: string) => {
   try {
-    const { data } = await axios.get(
-      `http://localhost:5000/api/user/${postId}`
+    const { data } = await axiosInstance.get(
+      `/user/${postId}`
     );
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
+};
+
+export const updateUser = async (formData: FormData, userId: string) => {
+  try {
+    const { data } = await axiosInstance.put(`/user/update-profile/${userId}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     return data;
   } catch (err: any) {

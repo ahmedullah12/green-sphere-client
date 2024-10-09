@@ -10,15 +10,18 @@ const Profile = () => {
   const { user } = useUser();
   const { data: posts, isLoading } = useGetMyPosts(user?._id as string);
 
+  const filteredPosts = posts?.data.filter((post: IPost) => {
+    if (user?.isVerified) return true;
+    return post.tag !== "PREMIUM";
+  });
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">Posts</h1>
-      {
-        isLoading && <Loading/>
-      }
+      {isLoading && <Loading />}
       <div className="space-y-6">
-        {posts?.data.length > 0 ? (
-          posts?.data?.map((post: IPost) => (
+        {filteredPosts && filteredPosts.length > 0 ? (
+          filteredPosts.map((post: IPost) => (
             <Post key={post._id} post={post}></Post>
           ))
         ) : (
