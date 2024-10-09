@@ -5,10 +5,9 @@ import { Avatar } from "@nextui-org/avatar";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Image } from "@nextui-org/image";
+import parse from "html-react-parser";
 import Link from "next/link";
-
 import { BsThreeDotsVertical } from "react-icons/bs";
-
 import LightGallery from "lightgallery/react";
 import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-zoom.css";
@@ -27,12 +26,14 @@ import {
 } from "@/src/hooks/favourites.hook";
 
 const Post = ({ post }: { post: IPost }) => {
-  const { _id, title, image, tag, userId, category } = post || {};
+  const { _id, title, image, description, tag, userId, category } = post || {};
   const [showEditOptions, setShowEditOptions] = useState(false);
 
   const { user } = useUser();
 
-  const { data: favourites, refetch: favouritesRefetch } = useGetFavourites(user?._id as string);
+  const { data: favourites, refetch: favouritesRefetch } = useGetFavourites(
+    user?._id as string
+  );
   const favouriteItem = favourites?.data.find(
     (fav: any) => fav.postId._id === _id
   );
@@ -42,26 +43,29 @@ const Post = ({ post }: { post: IPost }) => {
   const { mutate: removeFavourite } = useRemoveFavourite();
 
   const handleAddFavourite = () => {
-    addFavourite({
-      userId: user?._id as string,
-      postId: _id,
-    }, {
-      onSuccess: () => {
-        favouritesRefetch();
+    addFavourite(
+      {
+        userId: user?._id as string,
+        postId: _id,
+      },
+      {
+        onSuccess: () => {
+          favouritesRefetch();
+        },
       }
-    });
+    );
   };
 
   const handleRemoveFavourite = () => {
     removeFavourite(favouriteItem._id, {
       onSuccess: () => {
         favouritesRefetch();
-      }
-    })
-  }
+      },
+    });
+  };
 
   return (
-    <Card className="py-4">
+    <Card className="py-4 mb-4">
       <CardHeader className="pb-0 pt-2 px-4 flex items-center justify-between">
         <div className="flex gap-5">
           <Avatar
@@ -71,7 +75,13 @@ const Post = ({ post }: { post: IPost }) => {
             src={userId?.profilePhoto}
           />
           <div className="flex flex-col gap-1 items-start justify-center">
-            <Link href={`/profile/${userId?._id}`}>
+            <Link
+              href={
+                user && userId && user._id === userId._id
+                  ? "/profile"
+                  : `/profile/${userId?._id}`
+              }
+            >
               <h4 className="text-small font-semibold leading-none text-default-600 hover:underline">
                 {userId?.name}
               </h4>
@@ -110,7 +120,7 @@ const Post = ({ post }: { post: IPost }) => {
               <Link href={image} data-src={image}>
                 <Image
                   alt="Card background"
-                  className="object-cover rounded-none z-0"
+                  className="object-cover rounded-none z-0 max-h-[400px]"
                   src={image}
                   width="100%"
                 />
@@ -120,8 +130,8 @@ const Post = ({ post }: { post: IPost }) => {
         </div>
 
         <div className="px-2">
-          <div className="flex justify-between mt-4">
-            <p className="ps-4 text-xl font-medium mb-1 hover:underline">
+          <div className="flex justify-between items-start h-auto mt-4">
+            <p className=" text-xl font-medium mb-1 hover:underline">
               <Link href={`/news-feed/post/${_id}`}>{title}</Link>
             </p>
             {isFavorite ? (
@@ -140,7 +150,7 @@ const Post = ({ post }: { post: IPost }) => {
               </button>
             )}
           </div>
-          <div className="ps-4 flex gap-2 my-2">
+          <div className=" flex gap-2 my-2">
             {category.map((item, index) => (
               <p
                 key={index}
@@ -149,6 +159,9 @@ const Post = ({ post }: { post: IPost }) => {
                 {item}
               </p>
             ))}
+          </div>
+          <div>
+            <p>{parse(description)}</p>
           </div>
         </div>
       </CardBody>

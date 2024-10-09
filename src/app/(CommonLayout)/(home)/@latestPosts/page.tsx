@@ -2,11 +2,11 @@ import { IPost } from "@/src/types";
 import Container from "@/src/components/UI/Container";
 import Link from "next/link";
 import { Button } from "@nextui-org/button";
-import { getRecentPosts } from "@/src/services/Posts";
+import { getLatestPosts } from "@/src/services/Posts";
 import PostCard from "../../_components/shared/PostCard";
 
 export default async function LatestPosts() {
-  const { data: allPosts } = await getRecentPosts();
+  const { data: allPosts } = await getLatestPosts();
 
   // Filter out premium posts and limit to 4
   const posts = allPosts

@@ -38,7 +38,7 @@ export default function GardeningQuotes() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center">
           <Leaf className="text-primary dark:text-white mr-2" size={24} />
-          <h2 className="text-2xl font-semibold text-primary dark:text-white">Gardening Wisdom</h2>
+          <h2 className="text-xl font-semibold text-primary dark:text-white">Gardening Wisdom</h2>
         </div>
         <RefreshButton onRefresh={handleRefresh} />
       </div>

@@ -132,7 +132,13 @@ const ProfileSidebar = ({
                 height={80}
                 className="rounded-md max-w-full"
               />
-              <Link href={`/profile/${listUser?._id}`}>
+              <Link
+                href={
+                  currentUser && currentUser._id === listUser._id
+                    ? "/profile"
+                    : `/profile/${listUser?._id}`
+                }
+              >
                 <span className="text-xs md:text-sm">{listUser.name}</span>
               </Link>
             </div>
@@ -201,9 +207,17 @@ const ProfileSidebar = ({
 
         {!isOwnProfile &&
           (isFollowing ? (
-            <Button onClick={handleUnfollowUser}>Following</Button>
+            <Button size="sm" onClick={handleUnfollowUser}>
+              Following
+            </Button>
           ) : (
-            <Button onClick={handleFollowUser}>Follow</Button>
+            <Button
+              size="sm"
+              className="bg-blue-400 dark:bg-default text-white"
+              onClick={handleFollowUser}
+            >
+              Follow
+            </Button>
           ))}
       </div>
 

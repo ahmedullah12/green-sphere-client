@@ -11,11 +11,16 @@ import { useGetUserData } from "@/src/hooks/user.hooks";
 export default function Layout({ children }: { children: ReactNode }) {
   const { user: currentUser } = useUser();
   const params = useParams();
-  
+
   const userId = params.userId as string;
   const shouldFetchUser = userId && userId !== currentUser?._id;
-  
-  const { data: userData, isLoading, error, refetch: userRefetch } = useGetUserData(shouldFetchUser ? userId : '');
+
+  const {
+    data: userData,
+    isLoading,
+    error,
+    refetch: userRefetch,
+  } = useGetUserData(shouldFetchUser ? userId : "");
 
   let profileUser: IUser | null = null;
   let isError = false;
@@ -35,9 +40,9 @@ export default function Layout({ children }: { children: ReactNode }) {
     <Container>
       <div className="my-3 flex flex-col md:flex-row w-full md:gap-12">
         <div className="w-full md:w-2/5 mb-6 md:mb-0">
-          <ProfileSidebar 
-            profileUser={profileUser} 
-            isLoading={isLoading} 
+          <ProfileSidebar
+            profileUser={profileUser}
+            isLoading={isLoading}
             isError={isError}
             refetch={userRefetch}
           />

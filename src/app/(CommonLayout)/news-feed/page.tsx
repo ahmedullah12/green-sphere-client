@@ -1,34 +1,30 @@
+"use client"
 
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import CreatePostButton from "../_components/page/news-feed/CreatePostButton";
-import axiosInstance from "@/src/lib/AxiosInstance";
-import { LoadMoreNewsFeed } from "../_components/page/news-feed/LoadMoreNewsFeed";
 import Filters from "../_components/page/news-feed/Filters";
 import GardeningQuotes from "@/src/components/UI/GardeningQuotes";
+import { useQueryClient } from "@tanstack/react-query";
+import { LoadMoreNewsFeed } from "../_components/page/news-feed/LoadMoreNewsFeed";
 
-const NewsFeed = async ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) => {
-  const params = new URLSearchParams();
-  Object.entries(searchParams).forEach(([key, value]) => {
-    if (typeof value === 'string') {
-      params.append(key, value);
-    }
-  });
+const NewsFeed = () => {
+  const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
 
-  const res = await axiosInstance.get("/posts", {
-    params: {
-      sortBy: params.get("sortBy") || "-createdAt",
-      searchTerm: params.get("searchTerm"),
-      category: params.get("category"),
-      page: 1,
-      limit: 2,
-    },
-  });
-  const initialPosts = await res.data.data;
+  const refetchNewsFeed = () => {
+    queryClient.invalidateQueries({ queryKey: ["newsFeed"] });
+  };
+
+  useEffect(() => {
+    refetchNewsFeed();
+  }, [searchParams]);
 
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4 mt-16">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left Sidebar and Create Post Button (for small devices) */}
+          {/* Left Sidebar and Filters */}
           <div className="lg:w-1/4 flex flex-col gap-4">
             <div className="sticky top-4 max-h-[calc(100vh-64px)] overflow-y-auto bg-white dark:bg-default shadow-md rounded-lg p-4">
               <Filters />
@@ -40,17 +36,17 @@ const NewsFeed = async ({ searchParams }: { searchParams: { [key: string]: strin
 
           {/* Main Content Area */}
           <main className="lg:w-1/2 space-y-6 order-last lg:order-none">
-            <LoadMoreNewsFeed initialPosts={initialPosts} />
+            <LoadMoreNewsFeed />
           </main>
 
-          {/* Right Sidebar (for large devices) */}
+          {/* Right Sidebar */}
           <aside className="hidden lg:block lg:w-1/4">
             <div className="sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto bg-white dark:bg-default shadow-md rounded-lg p-4">
               <div className="mb-6">
                 <CreatePostButton />
               </div>
               <div>
-                <GardeningQuotes/>
+                <GardeningQuotes />
               </div>
             </div>
           </aside>

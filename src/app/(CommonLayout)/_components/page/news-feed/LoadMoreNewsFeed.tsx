@@ -1,126 +1,69 @@
-"use client";
 
-import { useEffect, useState } from "react";
+
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { useInView } from "react-intersection-observer";
-import { IPost } from "@/src/types";
-import Post from "@/src/components/UI/Post/Post";
+import { useQueryClient } from "@tanstack/react-query";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { Spinner } from "@nextui-org/spinner";
-import axios from "axios";
+import Post from "@/src/components/UI/Post/Post";
+import { IPost } from "@/src/types";
 import { useUser } from "@/src/context/user.provider";
+import axios from "axios";
 
-export function LoadMoreNewsFeed({ initialPosts }: { initialPosts: IPost[] }) {
+export function LoadMoreNewsFeed() {
   const { user } = useUser();
-  const [posts, setPosts] = useState<IPost[]>([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
 
-  const { ref, inView } = useInView({
-    threshold: 0.1,
-    triggerOnce: false,
-  });
+  const refetchNewsFeed = () => {
+    queryClient.invalidateQueries({ queryKey: ["newsFeed"] });
+  };
 
-  function filterPremiumPosts(
-    posts: IPost[],
-    isVerified: boolean | undefined
-  ): IPost[] {
-    return posts.filter(
-      (post) => !post.tag || post.tag !== "PREMIUM" || isVerified
-    );
-  }
+  const filterPremiumPosts = (posts: IPost[], isVerified: boolean | undefined): IPost[] => {
+    return posts.filter((post) => !post.tag || post.tag !== "PREMIUM" || isVerified);
+  };
 
-  const fetchPosts = async (currentPage: number, limit: number) => {
+  const fetchPosts = async ({ pageParam = 1 }) => {
     const res = await axios.get("http://localhost:5000/api/posts", {
       params: {
         sortBy: searchParams.get("sortBy") || "-createdAt",
         searchTerm: searchParams.get("searchTerm"),
         category: searchParams.get("category"),
-        page: currentPage,
-        limit,
+        page: pageParam,
+        limit: 2,
       },
     });
-    return res.data.data;
+    return res.data;
   };
 
-  const loadMorePosts = async (initialLoad = false) => {
-    if (loading || (!hasMore && !initialLoad)) return;
+  const { data, fetchNextPage, hasNextPage,  } = useInfiniteQuery({
+    queryKey: ["newsFeed", searchParams],
+    queryFn: fetchPosts,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.data.length === 0) return undefined;
+      return allPages.length + 1;
+    },
+    staleTime: 1000 * 60 * 10,
+    initialPageParam: 1,
+  });
+  
 
-    setLoading(true);
-    try {
-      let newPosts: IPost[] = [];
-      let currentPage = initialLoad ? 1 : page;
-      const postsPerPage = 2; // Adjust this value as needed
-
-      while (newPosts.length < postsPerPage && hasMore) {
-        const fetchedPosts = await fetchPosts(currentPage, postsPerPage);
-        if (fetchedPosts.length === 0) {
-          setHasMore(false);
-          break;
-        }
-
-        const filteredPosts = filterPremiumPosts(
-          fetchedPosts,
-          user?.isVerified
-        );
-        newPosts = [...newPosts, ...filteredPosts];
-        currentPage++;
-      }
-
-      if (newPosts.length > 0) {
-        setPosts((prevPosts) => [
-          ...(initialLoad ? [] : prevPosts),
-          ...newPosts,
-        ]);
-        setPage(currentPage);
-      } else if (!hasMore) {
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error("Failed to load posts:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    // Initial load
-    const filteredInitialPosts = filterPremiumPosts(
-      initialPosts,
-      user?.isVerified
-    );
-    if (filteredInitialPosts.length > 0) {
-      setPosts(filteredInitialPosts);
-      setPage(2);
-    } else {
-      // If no initial posts pass the filter, fetch more
-      loadMorePosts(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (inView && !loading && hasMore) {
-      loadMorePosts();
-    }
-  }, [inView]);
-
-  useEffect(() => {
-    // Reset posts and page when filters change
-    loadMorePosts(true);
-  }, [searchParams, user?.isVerified]);
+  const posts = data?.pages.flatMap((page) => filterPremiumPosts(page.data, user?.isVerified)) || [];
 
   return (
-    <>
+    <InfiniteScroll
+      dataLength={posts.length}
+      next={fetchNextPage}
+      hasMore={!!hasNextPage}
+      loader={<div className="flex justify-center my-2"><Spinner /></div>}
+      endMessage={<p className="text-center my-4">No more posts to load</p>}
+      style={{overflow: ""}}
+    >
+      <div className="space-y-4">
       {posts.map((post: IPost) => (
         <Post key={post._id} post={post} />
       ))}
-
-      <div ref={ref} className="flex justify-center items-center h-20 my-4">
-        {loading && <Spinner />}
-        {!hasMore && posts.length === 0 && <p>No posts available</p>}
-        {!hasMore && posts.length > 0 && <p>No more posts to load</p>}
       </div>
-    </>
+    </InfiniteScroll>
   );
 }

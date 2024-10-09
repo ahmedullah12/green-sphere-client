@@ -100,14 +100,14 @@ export const downvotePost = async (postId: string, userId: string) => {
   }
 };
 
-export const getRecentPosts = async () => {
+export const getLatestPosts = async () => {
   const fetchOptions = {
     next: {
       tags: ["posts"],
     },
   };
   const res = await fetch(
-    `${envConfig.baseApi}/posts?sortBy=-createdAt&limit=4`,
+    `${envConfig.baseApi}/posts?sortBy=-createdAt`,
     fetchOptions
   );
 

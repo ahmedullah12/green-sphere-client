@@ -10,14 +10,17 @@ import { Button } from "@nextui-org/button";
 import GSRichTextEditor from "../form/GSRichTextEditor";
 import { IPost } from "@/src/types";
 import { useUpdatePost } from "@/src/hooks/posts.hooks";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface IProps {
   postData: IPost;
 }
 
 const EditPostModal = ({ postData }: IProps) => {
-
-    const {mutate: handleUpdatePost, isPending} = useUpdatePost();
+  const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const { mutate: handleUpdatePost, isPending } = useUpdatePost();
 
   const categoryOptions = Object.entries(POST_CATEGORY).map((category) => ({
     key: category[1],
@@ -30,73 +33,85 @@ const EditPostModal = ({ postData }: IProps) => {
   ];
 
   const handleSubmit: SubmitHandler<FieldValues> = (data) => {
-      
     const newData = {
-        title: data.title,
-        description: data.description,
-        category: data.categories,
-        tag: data.tag,
-        userId: postData.userId._id,
-    }
-    
-    handleUpdatePost({postData: newData, postId: postData._id})
+      title: data.title,
+      description: data.description,
+      category: data.categories,
+      tag: data.tag,
+      userId: postData.userId._id,
+    };
+
+    handleUpdatePost(
+      { postData: newData, postId: postData._id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["newsFeed", "GET_MY_POSTS"] });
+          setIsOpen(false);
+        },
+      }
+    );
   };
+
   return (
-    <GSModal
-      buttonText="Edit"
-      title="Edit"
-      buttonClassName="bg-primary dark:bg-default text-xs text-white"
-    >
-      <GSForm
-        defaultValues={{
+    <>
+      <Button
+        className="bg-primary dark:bg-default text-xs text-white"
+        onPress={() => setIsOpen(true)}
+      >
+        Edit
+      </Button>
+      <GSModal
+        isOpen={isOpen}
+        onOpenChange={(open) => setIsOpen(open)}
+        title="Edit Post"
+      >
+        <GSForm
+          defaultValues={{
             title: postData.title,
             tag: postData.tag,
             description: postData.description,
           }}
-        onSubmit={handleSubmit}
-      >
-        <div className="py-3">
-          <GSInput label="Title" name="title" size="sm" required={true} />
-        </div>
-        <div className="py-3">
-          <GSSelect
-            name="categories"
-            label="Select Categories"
-            selectionMode="multiple"
-            options={categoryOptions}
-            required={true}
-            value={postData.category}
-          />
-        </div>
-        <div className="py-3">
-          <GSSelect
-            name="tag"
-            label="Select Tag"
-            selectionMode="single"
-            options={tagsOptions}
-            required={true}
-          />
-        </div>
-
-        <div className="py-3">
-          <GSRichTextEditor
-            name="description"
-            label="Add Description"
-            required={true}
-          />
-        </div>
-
-        <Button
-          className="my-3 w-full bg-primary dark:bg-default text-white rounded-md"
-          size="lg"
-          type="submit"
+          onSubmit={handleSubmit}
         >
-          {
-            isPending ? "Updating..." : "Update"
-          }
-        </Button>
-      </GSForm>
-    </GSModal>
+          <div className="py-3">
+            <GSInput label="Title" name="title" size="sm" required={true} />
+          </div>
+          <div className="py-3">
+            <GSSelect
+              name="categories"
+              label="Select Categories"
+              selectionMode="multiple"
+              options={categoryOptions}
+              required={true}
+              value={postData.category}
+            />
+          </div>
+          <div className="py-3">
+            <GSSelect
+              name="tag"
+              label="Select Tag"
+              selectionMode="single"
+              options={tagsOptions}
+              required={true}
+            />
+          </div>
+          <div className="py-3">
+            <GSRichTextEditor
+              name="description"
+              label="Add Description"
+              required={true}
+            />
+          </div>
+          <Button
+            className="my-3 w-full bg-primary dark:bg-default text-white rounded-md"
+            size="lg"
+            type="submit"
+          >
+            {isPending ? "Updating..." : "Update"}
+          </Button>
+        </GSForm>
+      </GSModal>
+    </>
   );
 };
 

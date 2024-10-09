@@ -5,6 +5,8 @@ import Post from "@/src/components/UI/Post/Post";
 import { useUser } from "@/src/context/user.provider";
 import { useGetMyPosts } from "@/src/hooks/posts.hooks";
 import { IPost } from "@/src/types";
+import { Button } from "@nextui-org/button";
+import Link from "next/link";
 
 const Profile = () => {
   const { user } = useUser();
@@ -17,11 +19,18 @@ const Profile = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Posts</h1>
+       <div className="flex justify-between">
+        <h1 className="text-2xl font-bold mb-6">My Posts</h1>
+        <Link href="/profile/favourites">
+          <Button size="sm" className="bg-primary dark:bg-default text-white">
+            Favourite Posts
+          </Button>
+        </Link>
+      </div>
       {isLoading && <Loading />}
       <div className="space-y-6">
-        {filteredPosts && filteredPosts.length > 0 ? (
-          filteredPosts.map((post: IPost) => (
+        {filteredPosts && filteredPosts?.length > 0 ? (
+          filteredPosts?.map((post: IPost) => (
             <Post key={post._id} post={post}></Post>
           ))
         ) : (
