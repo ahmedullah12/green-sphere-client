@@ -2,9 +2,9 @@
 
 import axiosInstance from "@/src/lib/AxiosInstance";
 
-export const getUserData = async (postId: string) => {
+export const getUserData = async (userId: string) => {
   try {
-    const { data } = await axiosInstance.get(`/user/${postId}`);
+    const { data } = await axiosInstance.get(`/user/${userId}`);
 
     return data;
   } catch (err: any) {

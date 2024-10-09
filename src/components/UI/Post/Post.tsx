@@ -20,12 +20,45 @@ import EditPostModal from "../../modals/EditPostModal";
 import DeletePostModal from "../../modals/DeletePostModal";
 import { IPost, IUser } from "@/src/types";
 import PostFooter from "./PostFooter";
+import {
+  useAddFavourite,
+  useGetFavourites,
+  useRemoveFavourite,
+} from "@/src/hooks/favourites.hook";
 
 const Post = ({ post }: { post: IPost }) => {
   const { _id, title, image, tag, userId, category } = post || {};
   const [showEditOptions, setShowEditOptions] = useState(false);
 
   const { user } = useUser();
+
+  const { data: favourites, refetch: favouritesRefetch } = useGetFavourites(user?._id as string);
+  const favouriteItem = favourites?.data.find(
+    (fav: any) => fav.postId._id === _id
+  );
+  const isFavorite = !!favouriteItem;
+
+  const { mutate: addFavourite } = useAddFavourite();
+  const { mutate: removeFavourite } = useRemoveFavourite();
+
+  const handleAddFavourite = () => {
+    addFavourite({
+      userId: user?._id as string,
+      postId: _id,
+    }, {
+      onSuccess: () => {
+        favouritesRefetch();
+      }
+    });
+  };
+
+  const handleRemoveFavourite = () => {
+    removeFavourite(favouriteItem._id, {
+      onSuccess: () => {
+        favouritesRefetch();
+      }
+    })
+  }
 
   return (
     <Card className="py-4">
@@ -39,9 +72,9 @@ const Post = ({ post }: { post: IPost }) => {
           />
           <div className="flex flex-col gap-1 items-start justify-center">
             <Link href={`/profile/${userId?._id}`}>
-            <h4 className="text-small font-semibold leading-none text-default-600 hover:underline">
-              {userId?.name}
-            </h4>
+              <h4 className="text-small font-semibold leading-none text-default-600 hover:underline">
+                {userId?.name}
+              </h4>
             </Link>
           </div>
         </div>
@@ -87,9 +120,26 @@ const Post = ({ post }: { post: IPost }) => {
         </div>
 
         <div className="px-2">
-          <p className="ps-4 text-xl font-medium mt-3 mb-1 hover:underline">
-            <Link href={`/news-feed/post/${_id}`}>{title}</Link>
-          </p>
+          <div className="flex justify-between mt-4">
+            <p className="ps-4 text-xl font-medium mb-1 hover:underline">
+              <Link href={`/news-feed/post/${_id}`}>{title}</Link>
+            </p>
+            {isFavorite ? (
+              <button
+                onClick={handleRemoveFavourite}
+                className="px-2 py-1 bg-purple-500 dark:bg-default text-white text-xs rounded-md"
+              >
+                UnFavourite
+              </button>
+            ) : (
+              <button
+                onClick={handleAddFavourite}
+                className="px-2 py-1 bg-blue-400 dark:bg-default text-white text-xs rounded-md"
+              >
+                Favourite
+              </button>
+            )}
+          </div>
           <div className="ps-4 flex gap-2 my-2">
             {category.map((item, index) => (
               <p
