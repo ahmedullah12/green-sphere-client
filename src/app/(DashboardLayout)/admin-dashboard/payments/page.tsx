@@ -5,7 +5,7 @@ import GSTable from "@/src/components/UI/Table";
 import { useGetAllPayments } from "@/src/hooks/payment.hooks";
 import { IPayment } from "@/src/types";
 import Link from "next/link";
-// import MonthlyPaymentsChart from "../../_components/MonthlyPaymentsChart";
+import MonthlyPaymentsChart from "../../_components/MonthlyPaymentsChart";
 
 const Payments = () => {
   const { data: payments, isLoading } = useGetAllPayments();
@@ -15,6 +15,8 @@ const Payments = () => {
     { key: "userName", label: "User Name" },
     { key: "email", label: "Email" },
     { key: "amount", label: "Amount" },
+    {key: "status", label: "Status"},
+    {key: "createdAt", label: "Date"}
   ];
 
   const rows = payments?.data?.map((payment: IPayment) => ({
@@ -37,7 +39,8 @@ const Payments = () => {
     ),
     email: payment.email,
     amount: payment.totalAmount,
-    // createdAt: new Date(post.createdAt).toLocaleDateString(),
+    status: payment.isConfirmed ? "Paid" : "Failed",
+    createdAt: new Date(payment.createdAt).toLocaleDateString(),
   }));
 
   if (isLoading) return <Loading />;
@@ -48,7 +51,7 @@ const Payments = () => {
       <div className="mb-6 md:mb-10">
         <GSTable columns={columns} rows={rows || []} />
       </div>
-      {/* {payments && <MonthlyPaymentsChart payments={payments?.data} />} */}
+      {payments && <MonthlyPaymentsChart payments={payments?.data} />}
     </div>
   );
 };

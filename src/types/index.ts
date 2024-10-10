@@ -69,5 +69,7 @@ export interface IPayment {
   address: string;
   totalAmount: number;
   isConfirmed: boolean;
+  createdAt: string;
+  updatedAt: string;
   __v: number;
 }
