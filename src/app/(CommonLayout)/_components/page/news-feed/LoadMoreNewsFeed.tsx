@@ -1,5 +1,3 @@
-
-
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
@@ -19,24 +17,32 @@ export function LoadMoreNewsFeed() {
     queryClient.invalidateQueries({ queryKey: ["newsFeed"] });
   };
 
-  const filterPremiumPosts = (posts: IPost[], isVerified: boolean | undefined): IPost[] => {
-    return posts.filter((post) => !post.tag || post.tag !== "PREMIUM" || isVerified);
+  const filterPremiumPosts = (
+    posts: IPost[],
+    isVerified: boolean | undefined
+  ): IPost[] => {
+    return posts.filter(
+      (post) => !post.tag || post.tag !== "PREMIUM" || isVerified
+    );
   };
 
   const fetchPosts = async ({ pageParam = 1 }) => {
-    const res = await axios.get("http://localhost:5000/api/posts", {
-      params: {
-        sortBy: searchParams.get("sortBy") || "-createdAt",
-        searchTerm: searchParams.get("searchTerm"),
-        category: searchParams.get("category"),
-        page: pageParam,
-        limit: 2,
-      },
-    });
+    const res = await axios.get(
+      "https://assignment-6-server-six.vercel.app/api/posts",
+      {
+        params: {
+          sortBy: searchParams.get("sortBy") || "-createdAt",
+          searchTerm: searchParams.get("searchTerm"),
+          category: searchParams.get("category"),
+          page: pageParam,
+          limit: 2,
+        },
+      }
+    );
     return res.data;
   };
 
-  const { data, fetchNextPage, hasNextPage,  } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
     queryKey: ["newsFeed", searchParams],
     queryFn: fetchPosts,
     getNextPageParam: (lastPage, allPages) => {
@@ -46,23 +52,29 @@ export function LoadMoreNewsFeed() {
     staleTime: 1000 * 60 * 10,
     initialPageParam: 1,
   });
-  
 
-  const posts = data?.pages.flatMap((page) => filterPremiumPosts(page.data, user?.isVerified)) || [];
+  const posts =
+    data?.pages.flatMap((page) =>
+      filterPremiumPosts(page.data, user?.isVerified)
+    ) || [];
 
   return (
     <InfiniteScroll
       dataLength={posts.length}
       next={fetchNextPage}
       hasMore={!!hasNextPage}
-      loader={<div className="flex justify-center my-2"><Spinner /></div>}
+      loader={
+        <div className="flex justify-center my-2">
+          <Spinner />
+        </div>
+      }
       endMessage={<p className="text-center my-4">No more posts to load</p>}
-      style={{overflow: ""}}
+      style={{ overflow: "" }}
     >
       <div className="space-y-4">
-      {posts.map((post: IPost) => (
-        <Post key={post._id} post={post} />
-      ))}
+        {posts.map((post: IPost) => (
+          <Post key={post._id} post={post} />
+        ))}
       </div>
     </InfiniteScroll>
   );
