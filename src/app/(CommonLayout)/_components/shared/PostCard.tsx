@@ -30,7 +30,7 @@ const PostCard = ({ post }: IProps) => {
   };
 
   return (
-    <Card className="py-4">
+    <Card className="py-4 hover:scale-110">
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
         <div className="flex gap-5">
           <Avatar

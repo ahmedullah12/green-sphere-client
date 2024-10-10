@@ -89,6 +89,7 @@ export const useDownvotePost = () => {
 export const useGetMyPosts = (userId: string) => {
   return useQuery({
     queryKey: ["GET_MY_POSTS", userId],
-    queryFn: async() => await getMyPosts(userId)
+    queryFn: async() => await getMyPosts(userId),
+    enabled: !!userId,
   })
 }
