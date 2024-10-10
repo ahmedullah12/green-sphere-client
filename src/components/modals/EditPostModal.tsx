@@ -41,12 +41,25 @@ const EditPostModal = ({ postData }: IProps) => {
       userId: postData.userId._id,
     };
 
+
     handleUpdatePost(
       { postData: newData, postId: postData._id },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["newsFeed", "GET_MY_POSTS"] });
+          // On success, invalidate and refetch to ensure data consistency
+          queryClient.invalidateQueries({
+            queryKey: ["newsFeed"],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["GET_MY_POSTS"],
+          });
           setIsOpen(false);
+        },
+        onError: () => {
+          // If there's an error, rollback the optimistic update
+          queryClient.invalidateQueries({
+            queryKey: ["newsFeed", "GET_MY_POSTS"],
+          });
         },
       }
     );
@@ -54,12 +67,12 @@ const EditPostModal = ({ postData }: IProps) => {
 
   return (
     <>
-      <Button
-        className="bg-primary dark:bg-default text-xs text-white"
-        onPress={() => setIsOpen(true)}
+      <button
+        className="px-4 py-2 bg-primary dark:bg-default text-xs text-white rounded-md me-2 hover:opacity-80"
+        onClick={() => setIsOpen(true)}
       >
         Edit
-      </Button>
+      </button>
       <GSModal
         isOpen={isOpen}
         onOpenChange={(open) => setIsOpen(open)}
@@ -70,6 +83,7 @@ const EditPostModal = ({ postData }: IProps) => {
             title: postData.title,
             tag: postData.tag,
             description: postData.description,
+            categories: postData.category,
           }}
           onSubmit={handleSubmit}
         >
@@ -83,7 +97,6 @@ const EditPostModal = ({ postData }: IProps) => {
               selectionMode="multiple"
               options={categoryOptions}
               required={true}
-              value={postData.category}
             />
           </div>
           <div className="py-3">

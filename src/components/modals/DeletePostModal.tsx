@@ -14,7 +14,12 @@ const DeletePostModal = ({ postId }: { postId: string }) => {
   const onDelete = () => {
     handleDeletePost(postId, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["newsFeed", "GET_MY_POSTS"] });
+        queryClient.invalidateQueries({
+          queryKey: ["newsFeed"],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["GET_MY_POSTS"],
+        });
         setIsOpen(false);
       },
     });
@@ -22,12 +27,12 @@ const DeletePostModal = ({ postId }: { postId: string }) => {
 
   return (
     <>
-      <Button
-        className="bg-red-500 dark:bg-default text-xs text-white"
-        onPress={() => setIsOpen(true)}
+      <button
+        className="px-4 py-2 bg-red-500 dark:bg-default text-xs text-white rounded-md hover:opacity-80"
+        onClick={() => setIsOpen(true)}
       >
         Delete
-      </Button>
+      </button>
       <GSModal
         isOpen={isOpen}
         onOpenChange={(open) => setIsOpen(open)}

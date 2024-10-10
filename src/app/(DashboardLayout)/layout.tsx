@@ -4,6 +4,9 @@ import { useRef, useState } from "react";
 import { Home, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Divider } from "@nextui-org/divider";
+import { useUser } from "@/src/context/user.provider";
+import { userSidebarItems } from "@/src/constants";
+import { usePathname } from "next/navigation";
 
 export default function DashboardLayout({
   children,
@@ -12,6 +15,10 @@ export default function DashboardLayout({
 }) {
   const [showSidebar, setShowSidebar] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const { user } = useUser();
+
+  const pathname = usePathname()
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
       {/* Mobile Navbar */}
@@ -55,7 +62,7 @@ export default function DashboardLayout({
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`fixed inset-y-0 left-0 z-30 w-64 md:w-80 bg-secondary overflow-y-auto transition-transform duration-300 ease-in-out 
+        className={`fixed inset-y-0 left-0 z-30 w-64 md:w-80 bg-accent overflow-y-auto transition-transform duration-300 ease-in-out 
         ${showSidebar ? "translate-x-0" : "-translate-x-full"} 
         md:translate-x-0 flex flex-col justify-between min-h-screen`}
       >
@@ -68,7 +75,22 @@ export default function DashboardLayout({
           </div>
           <div>
             {/* sidebar links */}
-          </div> 
+            {user?.role === "USER" && (
+              <div className="flex flex-col gap-2 px-4 py-4">
+                {userSidebarItems.map((item) => (
+                  <Link
+                    className={`px-4 py-2 rounded-md ${
+                      pathname === item.link ? "bg-primary text-white" : ""
+                    }`} // Add conditional bg-primary
+                    key={item.name}
+                    href={item.link}
+                  >
+                    <p className="flex items-center gap-2">{item.icon} {item.name}</p>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <div className="p-4">
           <Link
