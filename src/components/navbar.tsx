@@ -17,7 +17,6 @@ import clsx from "clsx";
 
 import { siteConfig } from "@/src/config/site";
 import { ThemeSwitch } from "@/src/components/theme-switch";
-import { Logo } from "@/src/components/icons";
 import { useUser } from "../context/user.provider";
 import NavbarDropdown from "./NavbarDropdown";
 
@@ -35,8 +34,7 @@ export const Navbar = () => {
       <NavbarContent className="basis-1/5" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
-            <Logo />
-            <p className="font-bold text-inherit">GreenSphere</p>
+            <p className="text-xl font-bold text-inherit ms-4">GreenSphere</p>
           </NextLink>
         </NavbarBrand>
       </NavbarContent>

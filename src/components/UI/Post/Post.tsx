@@ -24,6 +24,7 @@ import {
   useGetFavourites,
   useRemoveFavourite,
 } from "@/src/hooks/favourites.hook";
+import { MdVerified } from "react-icons/md";
 
 const Post = ({ post }: { post: IPost }) => {
   const { _id, title, image, description, tag, userId, category } = post || {};
@@ -34,9 +35,8 @@ const Post = ({ post }: { post: IPost }) => {
   const { data: favourites, refetch: favouritesRefetch } = useGetFavourites(
     user?._id as string
   );
-  const favouriteItem = post &&  favourites?.data.find(
-    (fav: any) => fav.postId?._id === _id
-  );
+  const favouriteItem =
+    post && favourites?.data.find((fav: any) => fav.postId?._id === _id);
   const isFavorite = !!favouriteItem;
 
   const { mutate: addFavourite } = useAddFavourite();
@@ -82,8 +82,11 @@ const Post = ({ post }: { post: IPost }) => {
                   : `/profile/${userId?._id}`
               }
             >
-              <h4 className="text-small font-semibold leading-none text-default-600 hover:underline">
+              <h4 className="text-small font-semibold leading-none text-default-600 hover:underline flex items-center gap-1">
                 {userId.name}
+                {userId?.isVerified && (
+                  <MdVerified className="text-blue-500" size={20} />
+                )}
               </h4>
             </Link>
           </div>

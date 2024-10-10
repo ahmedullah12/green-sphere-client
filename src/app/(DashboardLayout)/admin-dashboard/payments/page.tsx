@@ -15,8 +15,8 @@ const Payments = () => {
     { key: "userName", label: "User Name" },
     { key: "email", label: "Email" },
     { key: "amount", label: "Amount" },
-    {key: "status", label: "Status"},
-    {key: "createdAt", label: "Date"}
+    { key: "status", label: "Status" },
+    { key: "createdAt", label: "Date" },
   ];
 
   const rows = payments?.data?.map((payment: IPayment) => ({

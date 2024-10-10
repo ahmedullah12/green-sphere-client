@@ -1,4 +1,3 @@
-
 import { IPayment } from "@/src/types";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import React, { useMemo } from "react";
@@ -21,11 +20,13 @@ interface MonthlyPayment {
 
 const MonthlyPaymentsChart = ({ payments }: { payments: IPayment[] }) => {
   const monthlyData: MonthlyPayment[] = useMemo(() => {
-    const data = Array(12).fill(null).map((_, i) => ({
-      month: new Date(2024, i).toLocaleString("default", { month: "short" }),
-      amount: 0,
-      count: 0,
-    }));
+    const data = Array(12)
+      .fill(null)
+      .map((_, i) => ({
+        month: new Date(2024, i).toLocaleString("default", { month: "short" }),
+        amount: 0,
+        count: 0,
+      }));
 
     payments.forEach((payment) => {
       const date = new Date(payment.createdAt);
@@ -51,8 +52,18 @@ const MonthlyPaymentsChart = ({ payments }: { payments: IPayment[] }) => {
             <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
             <Tooltip />
             <Legend />
-            <Bar yAxisId="left" dataKey="amount" fill="#8884d8" name="Total Amount" />
-            <Bar yAxisId="right" dataKey="count" fill="#82ca9d" name="Number of Payments" />
+            <Bar
+              yAxisId="left"
+              dataKey="amount"
+              fill="#8884d8"
+              name="Total Amount"
+            />
+            <Bar
+              yAxisId="right"
+              dataKey="count"
+              fill="#82ca9d"
+              name="Number of Payments"
+            />
           </BarChart>
         </ResponsiveContainer>
       </CardBody>
