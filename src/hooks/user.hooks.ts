@@ -1,5 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { followUser, getUserData, unfollowUser, updateUser } from "../services/User";
+import {
+  deleteUser,
+  followUser,
+  getAllUsers,
+  getUserData,
+  makeAdmin,
+  unfollowUser,
+  updateUser,
+} from "../services/User";
 import toast from "react-hot-toast";
 
 export const useGetUserData = (userId: string) => {
@@ -7,6 +15,13 @@ export const useGetUserData = (userId: string) => {
     queryKey: ["GET_USER_DATA", userId],
     queryFn: async () => await getUserData(userId),
     enabled: !!userId,
+  });
+};
+
+export const useGetAllUsers = () => {
+  return useQuery({
+    queryKey: ["GET_ALL_USER"],
+    queryFn: async () => await getAllUsers(),
   });
 };
 
@@ -25,6 +40,13 @@ export const useUpdateUser = () => {
   });
 };
 
+export const useDeleteUser = () => {
+  return useMutation<any, Error, string>({
+    mutationKey: ["DELETE_USER"],
+    mutationFn: async (userId) => await deleteUser(userId),
+  });
+};
+
 export const useFollowUser = () => {
   return useMutation<any, Error, { userId: string; followedUserId: string }>({
     mutationKey: ["UPDATE_USER"],
@@ -36,5 +58,12 @@ export const useUnfollowUser = () => {
   return useMutation<any, Error, { userId: string; followedUserId: string }>({
     mutationKey: ["UPDATE_USER"],
     mutationFn: async (payload) => await unfollowUser(payload),
+  });
+};
+
+export const useMakeAdmin = () => {
+  return useMutation<any, Error, string>({
+    mutationKey: ["MAKE_ADMIN"],
+    mutationFn: async (userId) => await makeAdmin(userId),
   });
 };

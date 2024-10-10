@@ -2,28 +2,24 @@
 
 import { Button } from "@nextui-org/button";
 import GSModal from "./GSModal";
-import { useDeletePost } from "@/src/hooks/posts.hooks";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useDeleteUser } from "@/src/hooks/user.hooks";
+import toast from "react-hot-toast";
 
-const DeletePostModal = ({ postId }: { postId: string }) => {
+const DeleteUserModal = ({ userId, disabled }: { userId: string, disabled: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
-  const { mutate: handleDeletePost, isPending } = useDeletePost();
+  const { mutate: handleDeleteUser, isPending } = useDeleteUser();
 
   const onDelete = () => {
-    handleDeletePost(postId, {
+    handleDeleteUser(userId, {
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ["newsFeed"],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["GET_MY_POSTS"],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["GET_POSTS"],
+          queryKey: ["GET_ALL_USER"],
         });
         setIsOpen(false);
+        toast.success("User Deleted Successfully")
       },
     });
   };
@@ -31,15 +27,16 @@ const DeletePostModal = ({ postId }: { postId: string }) => {
   return (
     <>
       <button
-        className="px-4 py-2 bg-red-500 dark:bg-default text-xs text-white rounded-md hover:opacity-80"
+        className="px-4 py-2 bg-red-500 dark:bg-default text-xs text-white rounded-md hover:opacity-80 disabled:bg-gray-200 disabled:dark:bg-gray-200"
         onClick={() => setIsOpen(true)}
+        disabled={disabled}
       >
         Delete
       </button>
       <GSModal
         isOpen={isOpen}
         onOpenChange={(open) => setIsOpen(open)}
-        title="Are you sure you want to delete this?"
+        title="Are you sure you want to delete this user?"
       >
         <div>
           <div className="flex justify-end">
@@ -57,4 +54,4 @@ const DeletePostModal = ({ postId }: { postId: string }) => {
   );
 };
 
-export default DeletePostModal;
+export default DeleteUserModal;

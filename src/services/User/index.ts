@@ -12,6 +12,16 @@ export const getUserData = async (userId: string) => {
   }
 };
 
+export const getAllUsers = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/user`);
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
+};
+
 export const updateUser = async (formData: FormData, userId: string) => {
   try {
     const { data } = await axiosInstance.put(
@@ -23,6 +33,16 @@ export const updateUser = async (formData: FormData, userId: string) => {
         },
       }
     );
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
+};
+
+export const deleteUser = async (userId: string) => {
+  try {
+    const { data } = await axiosInstance.delete(`/user/${userId}`);
 
     return data;
   } catch (err: any) {
@@ -48,6 +68,16 @@ export const unfollowUser = async (payload: {
 }) => {
   try {
     const { data } = await axiosInstance.put(`/user/unfollow-user`, payload);
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
+};
+
+export const makeAdmin = async (userId: string) => {
+  try {
+    const { data } = await axiosInstance.put(`/user/make-admin/${userId}`);
 
     return data;
   } catch (err: any) {
