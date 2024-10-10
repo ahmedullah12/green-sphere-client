@@ -27,15 +27,18 @@ export function LoadMoreNewsFeed() {
   };
 
   const fetchPosts = async ({ pageParam = 1 }) => {
-    const res = await axios.get("http://localhost:5000/api/posts", {
-      params: {
-        sortBy: searchParams.get("sortBy") || "-createdAt",
-        searchTerm: searchParams.get("searchTerm"),
-        category: searchParams.get("category"),
-        page: pageParam,
-        limit: 2,
-      },
-    });
+    const res = await axios.get(
+      "https://assignment-6-server-six.vercel.app/api/posts",
+      {
+        params: {
+          sortBy: searchParams.get("sortBy") || "-createdAt",
+          searchTerm: searchParams.get("searchTerm"),
+          category: searchParams.get("category"),
+          page: pageParam,
+          limit: 2,
+        },
+      }
+    );
     return res.data;
   };
 
