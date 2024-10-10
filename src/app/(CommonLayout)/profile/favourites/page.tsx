@@ -5,7 +5,6 @@ import Loading from "@/src/components/UI/Loading";
 import Post from "@/src/components/UI/Post/Post";
 import { useUser } from "@/src/context/user.provider";
 import { useGetFavourites } from "@/src/hooks/favourites.hook";
-import { IPost } from "@/src/types";
 import { Button } from "@nextui-org/button";
 import Link from "next/link";
 
@@ -31,8 +30,8 @@ const FavouritePosts = () => {
       {isLoading && <Loading />}
       <div className="space-y-6">
         {filteredPosts && filteredPosts.length > 0 ? (
-          filteredPosts.map((favourite: any) => (
-            <Post key={favourite.postId._id} post={favourite.postId} />
+          filteredPosts?.map((favourite: any) => (
+            <Post key={favourite?.postId?._id} post={favourite.postId} />
           ))
         ) : (
           <p>No posts to show</p>

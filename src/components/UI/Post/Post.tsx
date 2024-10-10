@@ -34,8 +34,8 @@ const Post = ({ post }: { post: IPost }) => {
   const { data: favourites, refetch: favouritesRefetch } = useGetFavourites(
     user?._id as string
   );
-  const favouriteItem = favourites?.data.find(
-    (fav: any) => fav.postId._id === _id
+  const favouriteItem = post &&  favourites?.data.find(
+    (fav: any) => fav.postId?._id === _id
   );
   const isFavorite = !!favouriteItem;
 
@@ -72,18 +72,18 @@ const Post = ({ post }: { post: IPost }) => {
             isBordered
             radius="full"
             size="md"
-            src={userId?.profilePhoto}
+            src={userId.profilePhoto}
           />
           <div className="flex flex-col gap-1 items-start justify-center">
             <Link
               href={
-                user && userId && user._id === userId._id
+                user && userId && user?._id === userId?._id
                   ? "/profile"
                   : `/profile/${userId?._id}`
               }
             >
               <h4 className="text-small font-semibold leading-none text-default-600 hover:underline">
-                {userId?.name}
+                {userId.name}
               </h4>
             </Link>
           </div>

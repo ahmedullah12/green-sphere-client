@@ -30,7 +30,7 @@ const VisitedProfile = () => {
       <h1 className="text-2xl font-bold mb-6">Posts</h1>
       <div className="space-y-6">
         {filteredPosts && filteredPosts.length > 0 ? (
-          filteredPosts.map((post: IPost) => (
+          filteredPosts?.map((post: IPost) => (
             <Post key={post._id} post={post}></Post>
           ))
         ) : (

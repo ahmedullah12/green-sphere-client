@@ -17,6 +17,7 @@ const Profile = () => {
     return post.tag !== "PREMIUM";
   });
 
+  if(isLoading) return <Loading/>
   return (
     <div>
        <div className="flex justify-between">
@@ -27,11 +28,11 @@ const Profile = () => {
           </Button>
         </Link>
       </div>
-      {isLoading && <Loading />}
+      
       <div className="space-y-6">
         {filteredPosts && filteredPosts?.length > 0 ? (
           filteredPosts?.map((post: IPost) => (
-            <Post key={post._id} post={post}></Post>
+            <Post key={post?._id} post={post}></Post>
           ))
         ) : (
           <p>No posts to show</p>

@@ -61,8 +61,8 @@ const ProfileSidebar = ({
     if (currentUser) {
       setCurrentUser({
         ...currentUser,
-        following: currentUser.following.filter(
-          (user) => user._id !== unfollowedUserId
+        following: currentUser?.following.filter(
+          (user) => user?._id !== unfollowedUserId
         ),
       });
     }
@@ -105,7 +105,7 @@ const ProfileSidebar = ({
   useEffect(() => {
     if (currentUser && profileUser && !isOwnProfile) {
       setIsFollowing(
-        currentUser.following.some((f: IUser) => f._id === profileUser._id)
+        currentUser.following.some((f: IUser) => f._id === profileUser?._id)
       );
     }
   }, [currentUser, profileUser, isOwnProfile]);
@@ -114,18 +114,18 @@ const ProfileSidebar = ({
     <div>
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-lg font-semibold">{type}</h2>
-        {users.length > 3 && (
+        {users?.length > 3 && (
           <Link
-            href={`/profile/${profileUser?._id}/${type.toLowerCase()}`}
+            href={`/user-dashboard/${type.toLowerCase()}`}
             className="text-sm text-primary"
           >
             See All
           </Link>
         )}
       </div>
-      {users.length > 0 ? (
+      {users?.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {users.slice(0, 3).map((listUser) => (
+          {users?.slice(0, 3).map((listUser) => (
             <div key={listUser._id} className="flex flex-col space-y-2">
               <Image
                 src={listUser.profilePhoto}
@@ -134,12 +134,12 @@ const ProfileSidebar = ({
               />
               <Link
                 href={
-                  currentUser && currentUser._id === listUser._id
+                  currentUser && currentUser?._id === listUser?._id
                     ? "/profile"
                     : `/profile/${listUser?._id}`
                 }
               >
-                <span className="text-xs md:text-sm">{listUser.name}</span>
+                <span className="text-xs md:text-sm">{listUser?.name}</span>
               </Link>
             </div>
           ))}
@@ -171,7 +171,7 @@ const ProfileSidebar = ({
       <div className="rounded-xl p-4">
         <div className="flex justify-center">
           <Image
-            src={profileUser.profilePhoto!}
+            src={profileUser?.profilePhoto!}
             alt="profile"
             className="max-w-[200px] md:max-w-[400px] h-[150px] md:h-[200px] object-cover"
           />
@@ -179,22 +179,17 @@ const ProfileSidebar = ({
         <div className="my-3">
           <div className="flex justify-between items-center">
             <h1 className="text-xl md:text-2xl font-semibold flex items-center gap-1">
-              {profileUser.name}{" "}
-              {profileUser.isVerified && (
+              {profileUser?.name}{" "}
+              {profileUser?.isVerified && (
                 <MdVerified className="text-blue-500" size={20} />
               )}
             </h1>
-            {isOwnProfile && !profileUser.isVerified && (
-              // <button
-              //   className="px-3 py-2 text-xs bg-blue-400 dark:bg-default text-white rounded-md disabled:bg-gray-200 disabled:dark:bg-gray-200"
-              //   disabled={!canVerify}
-              // >
-              //   Verify
-              // </button>
+            {isOwnProfile && !profileUser?.isVerified && (
+            
               <CreatePaymentModal disable={!canVerify} />
             )}
           </div>
-          <p className="break-words text-sm">{profileUser.email}</p>
+          <p className="break-words text-sm">{profileUser?.email}</p>
         </div>
         {isOwnProfile && (
           <Button
@@ -241,8 +236,8 @@ const ProfileSidebar = ({
       )}
 
       <div className="p-4 space-y-6">
-        {renderUserList(profileUser.following || [], "Following")}
-        {renderUserList(profileUser.followers || [], "Followers")}
+        {renderUserList(profileUser?.following || [], "Following")}
+        {renderUserList(profileUser?.followers || [], "Followers")}
       </div>
     </div>
   );
