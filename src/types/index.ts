@@ -15,26 +15,25 @@ export interface IPost {
   upvotes: string[];
   downvotes: string[];
   isDeleted: boolean;
-  createdAt: string; 
-  updatedAt: string; 
+  createdAt: string;
+  updatedAt: string;
   __v: number;
 }
 
 export interface IUser {
-  _id: string
-  name: string
-  email: string
-  profilePhoto: string
-  role: string
-  followers: IUser[]
-  following: IUser[]
-  isDeleted: boolean
-  isVerified: boolean
-  createdAt: string
-  updatedAt: string
-  __v: number
+  _id: string;
+  name: string;
+  email: string;
+  profilePhoto: string;
+  role: string;
+  followers: IUser[];
+  following: IUser[];
+  isDeleted: boolean;
+  isVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
-
 
 export interface IInput {
   variant?: "flat" | "bordered" | "faded" | "underlined";
@@ -59,4 +58,16 @@ export interface IPaymentPayload {
   email: string;
   phone: string;
   address: string;
+}
+
+export interface IPayment {
+  _id: string;
+  userId: IUser;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  totalAmount: number;
+  isConfirmed: boolean;
+  __v: number;
 }

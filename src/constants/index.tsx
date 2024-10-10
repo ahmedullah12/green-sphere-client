@@ -1,5 +1,6 @@
 import { BsFillPostcardHeartFill } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
+import { MdOutlinePayment } from "react-icons/md";
 
 export const POST_CATEGORY = {
   Gardening: "GARDENING",
@@ -50,7 +51,7 @@ export const adminSidebarItems = [
   { name: "All Users", link: "/admin-dashboard/users", icon: <FaUser /> },
   {
     name: "Payments",
-    link: "/user-dashboard/payments",
-    icon: <FaUser />,
+    link: "/admin-dashboard/payments",
+    icon: <MdOutlinePayment />,
   },
 ];

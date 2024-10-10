@@ -1,11 +1,13 @@
 "use client";
 
+import React from "react";
 import DeletePostModal from "@/src/components/modals/DeletePostModal";
 import Loading from "@/src/components/UI/Loading";
 import GSTable from "@/src/components/UI/Table";
 import { useGetPosts } from "@/src/hooks/posts.hooks";
 import { IPost } from "@/src/types";
 import Link from "next/link";
+import MonthlyPostsChart from "../_components/MonthlyPostsChart";
 
 const AdminDashboard = () => {
   const { data: posts, isLoading } = useGetPosts();
@@ -14,14 +16,12 @@ const AdminDashboard = () => {
     { key: "image", label: "" },
     { key: "title", label: "Title" },
     { key: "userName", label: "User Name" },
-
     { key: "tag", label: "Tag" },
     { key: "upvotes", label: "Upvotes" },
     { key: "createdAt", label: "CreatedAt" },
     { key: "actions", label: "" },
   ];
 
-  // Define rows by mapping posts data
   const rows = posts?.map((post: IPost) => ({
     key: post._id,
     image: (
@@ -62,11 +62,17 @@ const AdminDashboard = () => {
   }));
 
   if (isLoading) return <Loading />;
+
   return (
-    <div>
-      <h1 className="text-2xl font-semibold mb-4">All Posts</h1>
+    <div className="">
+      <h2 className="text-xl font-semibold">All Posts</h2>
       <div className="w-full h-[1px] bg-accent my-6"></div>
-      <GSTable columns={columns} rows={rows || []} />
+      <div className="mb-6 md:mb-10">
+        <GSTable columns={columns} rows={rows || []} />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <MonthlyPostsChart posts={posts || []} />
+      </div>
     </div>
   );
 };

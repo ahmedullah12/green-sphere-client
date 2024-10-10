@@ -18,3 +18,12 @@ export const createPayment = async (payload: IPaymentPayload) => {
 };
 
 
+export const getAllPayments = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/payment-collection`);
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
+};
