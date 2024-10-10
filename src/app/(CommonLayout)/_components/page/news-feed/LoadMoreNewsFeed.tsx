@@ -6,7 +6,7 @@ import { Spinner } from "@nextui-org/spinner";
 import Post from "@/src/components/UI/Post/Post";
 import { IPost } from "@/src/types";
 import { useUser } from "@/src/context/user.provider";
-import axiosInstance from "@/src/lib/AxiosInstance";
+import axios from "axios";
 
 export function LoadMoreNewsFeed() {
   const { user } = useUser();
@@ -27,7 +27,7 @@ export function LoadMoreNewsFeed() {
   };
 
   const fetchPosts = async ({ pageParam = 1 }) => {
-    const res = await axiosInstance.get(
+    const res = await axios.get(
       "https://assignment-6-server-six.vercel.app/api/posts",
       {
         params: {
