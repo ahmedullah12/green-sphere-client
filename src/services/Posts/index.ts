@@ -70,10 +70,8 @@ export const getSinglePost = async (postId: string) => {
   }
 };
 
-export const getPosts = async (params: any) => {
-  const res = await axiosInstance.get("/posts", {
-    params,
-  });
+export const getPosts = async () => {
+  const res = await axiosInstance.get("/posts");
   return res.data.data;
 };
 

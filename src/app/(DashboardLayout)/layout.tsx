@@ -5,7 +5,7 @@ import { Home, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Divider } from "@nextui-org/divider";
 import { useUser } from "@/src/context/user.provider";
-import { userSidebarItems } from "@/src/constants";
+import { adminSidebarItems, userSidebarItems } from "@/src/constants";
 import { usePathname } from "next/navigation";
 
 export default function DashboardLayout({
@@ -81,7 +81,22 @@ export default function DashboardLayout({
                   <Link
                     className={`px-4 py-2 rounded-md ${
                       pathname === item.link ? "bg-primary text-white" : ""
-                    }`} // Add conditional bg-primary
+                    }`}
+                    key={item.name}
+                    href={item.link}
+                  >
+                    <p className="flex items-center gap-2">{item.icon} {item.name}</p>
+                  </Link>
+                ))}
+              </div>
+            )}
+            {user?.role === "ADMIN" && (
+              <div className="flex flex-col gap-2 px-4 py-4">
+                {adminSidebarItems.map((item) => (
+                  <Link
+                    className={`px-4 py-2 rounded-md ${
+                      pathname === item.link ? "bg-primary text-white" : ""
+                    }`} 
                     key={item.name}
                     href={item.link}
                   >

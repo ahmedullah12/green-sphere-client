@@ -38,7 +38,7 @@ const GSTable = ({ columns, rows }: GSTableProps) => {
 
   return (
     <Table
-    isStriped
+      isStriped
       aria-label="Dynamic Table with Pagination"
       bottomContent={
         rows?.length > rowsPerPage ? (
@@ -62,7 +62,7 @@ const GSTable = ({ columns, rows }: GSTableProps) => {
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
-      <TableBody  emptyContent={"No data to display."} items={items}>
+      <TableBody emptyContent={"No data to display."} items={items}>
         {(item) => (
           <TableRow key={item.key}>
             {(columnKey) => (

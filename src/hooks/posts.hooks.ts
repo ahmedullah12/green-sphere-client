@@ -12,10 +12,10 @@ import {
 import toast from "react-hot-toast";
 import { FieldValues } from "react-hook-form";
 
-export const useGetPosts = (params: any) => {
+export const useGetPosts = () => {
   return useQuery({
-    queryKey: ["GET_POSTS", params],
-    queryFn: async() => await getPosts(params)
+    queryKey: ["GET_POSTS"],
+    queryFn: async() => await getPosts()
   })
 }
 

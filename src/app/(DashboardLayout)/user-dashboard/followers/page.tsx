@@ -3,12 +3,10 @@
 import Loading from "@/src/components/UI/Loading";
 import GSTable from "@/src/components/UI/Table";
 import { useUser } from "@/src/context/user.provider";
-import { useGetUserData, useUnfollowUser } from "@/src/hooks/user.hooks";
+import { useGetUserData } from "@/src/hooks/user.hooks";
 import { IUser } from "@/src/types";
-import { Button } from "@nextui-org/button";
 import { Image } from "@nextui-org/image";
 import Link from "next/link";
-import toast from "react-hot-toast";
 
 const FollowersPage = () => {
   const { user } = useUser();

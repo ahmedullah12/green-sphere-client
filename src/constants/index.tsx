@@ -45,3 +45,12 @@ export const userSidebarItems = [
     icon: <FaUser />,
   },
 ];
+export const adminSidebarItems = [
+  { name: "All Posts", link: "/admin-dashboard", icon: <BsFillPostcardHeartFill /> },
+  { name: "All Users", link: "/admin-dashboard/users", icon: <FaUser /> },
+  {
+    name: "Payments",
+    link: "/user-dashboard/payments",
+    icon: <FaUser />,
+  },
+];

@@ -20,6 +20,9 @@ const DeletePostModal = ({ postId }: { postId: string }) => {
         queryClient.invalidateQueries({
           queryKey: ["GET_MY_POSTS"],
         });
+        queryClient.invalidateQueries({
+          queryKey: ["GET_POSTS"],
+        });
         setIsOpen(false);
       },
     });
