@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -23,15 +23,15 @@ interface GSTableProps {
   rows: Row[];
 }
 
-const GSTable: React.FC<GSTableProps> = ({ columns, rows }) => {
+const GSTable = ({ columns, rows }: GSTableProps) => {
   const [page, setPage] = useState(1);
   const rowsPerPage = 6;
-  const pages = Math.ceil(rows.length / rowsPerPage);
+  const pages = Math.ceil(rows?.length / rowsPerPage);
 
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    return rows.slice(start, end);
+    return rows?.slice(start, end);
   }, [page, rows]);
 
   const getKeyValue = (item: Row, columnKey: string) => item[columnKey];
@@ -41,7 +41,7 @@ const GSTable: React.FC<GSTableProps> = ({ columns, rows }) => {
     isStriped
       aria-label="Dynamic Table with Pagination"
       bottomContent={
-        rows.length > rowsPerPage ? (
+        rows?.length > rowsPerPage ? (
           <div className="flex w-full justify-center">
             <Pagination
               isCompact
@@ -62,7 +62,7 @@ const GSTable: React.FC<GSTableProps> = ({ columns, rows }) => {
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
-      <TableBody items={items}>
+      <TableBody  emptyContent={"No data to display."} items={items}>
         {(item) => (
           <TableRow key={item.key}>
             {(columnKey) => (

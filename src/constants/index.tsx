@@ -40,7 +40,7 @@ export const userSidebarItems = [
   { name: "Posts", link: "/user-dashboard", icon: <BsFillPostcardHeartFill /> },
   { name: "Followers", link: "/user-dashboard/followers", icon: <FaUser /> },
   {
-    name: "Followed Users",
+    name: "Following",
     link: "/user-dashboard/following",
     icon: <FaUser />,
   },
