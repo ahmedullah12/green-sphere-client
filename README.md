@@ -25,6 +25,7 @@ With a focus on social interaction and user-generated content, this platform pro
 - You can edit your post and delete them also
 - After that you can see very good About Us and Contact Us page.
 - There is also the Profile page, where user can go to their profile and see their contents.
+- In Profile page, user can edit their profile and also change or recover their account password
 - User can verify their profile from profile page after they get at least one upvote in any of their post.
 - For User, they can see their Dashboard page, there they can see their posts, followers and following users.
 - There is a dashboard for Admin, there they can do a lot of things
