@@ -9,6 +9,7 @@ import Link from "next/link";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { useUser } from "@/src/context/user.provider";
 
 export default function RegisterPage() {
   const {
@@ -17,6 +18,8 @@ export default function RegisterPage() {
     isSuccess,
   } = useUserRegistration();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+  const {setIsLoading} = useUser();
 
   const router = useRouter();
 
@@ -45,6 +48,7 @@ export default function RegisterPage() {
     }
 
     handleUserRegistration(formData);
+    setIsLoading(true)
   };
 
   useEffect(() => {
