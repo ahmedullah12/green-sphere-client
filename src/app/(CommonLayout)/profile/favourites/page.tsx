@@ -16,7 +16,9 @@ const FavouritePosts = () => {
     if (user?.isVerified) return true;
     return favourite.postId.tag !== "PREMIUM";
   });
+  console.log(filteredPosts);
 
+  {isLoading && <Loading />}
   return (
     <div>
       <div className="flex justify-between">
@@ -27,11 +29,11 @@ const FavouritePosts = () => {
           </Button>
         </Link>
       </div>
-      {isLoading && <Loading />}
+      
       <div className="space-y-6">
         {filteredPosts && filteredPosts.length > 0 ? (
           filteredPosts?.map((favourite: any) => (
-            <Post key={favourite?.postId?._id} post={favourite.postId} />
+            <Post key={favourite?.postId?._id} post={favourite?.postId} />
           ))
         ) : (
           <p>No posts to show</p>

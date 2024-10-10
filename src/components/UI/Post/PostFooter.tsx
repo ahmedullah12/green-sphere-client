@@ -18,7 +18,7 @@ const PostFooter = ({ post, user }: { post: IPost; user: IUser }) => {
 
   const { mutate: handleUpvotePost } = useUpvotePost();
   const { mutate: handleDownvotePost } = useDownvotePost();
-  const { data: comments, refetch: refetchComments } = useGetComments(_id);
+  const { data: comments, refetch: refetchComments, isFetching } = useGetComments(_id);
   const { mutate: handleAddComments } = useCreateComment();
 
   const handleUpvote = () => {
@@ -172,6 +172,7 @@ const PostFooter = ({ post, user }: { post: IPost; user: IUser }) => {
 
       {showCommentInput &&
         comments &&
+        !isFetching &&
         comments.data &&
         comments.data.length > 0 && (
           <div className="w-full">
