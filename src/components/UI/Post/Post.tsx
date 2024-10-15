@@ -164,7 +164,7 @@ const Post = ({ post }: { post: IPost }) => {
             ))}
           </div>
           <div>
-            <p>{parse(description)}</p>
+            {parse(description)}
           </div>
         </div>
       </CardBody>

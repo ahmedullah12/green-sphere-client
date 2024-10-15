@@ -36,7 +36,8 @@ export const loginUser = async (userData: FieldValues) => {
 
     return data;
   } catch (err: any) {
-    throw new Error(err);
+    // throw new Error(err);
+    return err.response?.data;
   }
 };
 

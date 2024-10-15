@@ -26,14 +26,9 @@ export const useUserLogin = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["USER_LOGIN"],
     mutationFn: async (userData) => await loginUser(userData),
-    onSuccess: () => {
-      toast.success("User Logged In Successfully!!!");
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
   });
 };
+
 export const useChangePassword = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["CHANGE_PASSWORD"],
@@ -47,6 +42,7 @@ export const useChangePassword = () => {
     },
   });
 };
+
 export const usePasswordRecovery = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["CHANGE_PASSWORD"],
@@ -62,7 +58,8 @@ export const usePasswordRecovery = () => {
 export const useResetPassword = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["CHANGE_PASSWORD"],
-    mutationFn: async ({token, userData}) => await resetPassword(token, userData),
+    mutationFn: async ({ token, userData }) =>
+      await resetPassword(token, userData),
     onSuccess: () => {
       toast.success("New Password Created Successfully!!!");
     },

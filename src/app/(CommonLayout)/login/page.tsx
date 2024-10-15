@@ -1,6 +1,5 @@
 "use client";
 
-
 import { Button } from "@nextui-org/button";
 import Link from "next/link";
 import { FieldValues, SubmitHandler } from "react-hook-form";
@@ -10,6 +9,7 @@ import { useUserLogin } from "@/src/hooks/auth.hooks";
 import GSForm from "@/src/components/form/GSForm";
 import GSInput from "@/src/components/form/GSInput";
 import { useUser } from "@/src/context/user.provider";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const searchParams = useSearchParams();
@@ -19,7 +19,7 @@ const Login = () => {
 
   const redirect = searchParams.get("redirect");
 
-  const { mutate: handleLoginUser, isPending, isSuccess } = useUserLogin();
+  const { mutate: handleLoginUser, isPending, data, } = useUserLogin();
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     handleLoginUser(data);
@@ -27,14 +27,22 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (!isPending && isSuccess) {
-      if (redirect) {
-        router.push(redirect);
+    if (!isPending && data) {
+      if (data.success) {
+        if (redirect) {
+          toast.success(data.message);
+          router.push(redirect);
+        } else {
+          toast.success(data.message);
+          router.push("/");
+        }
+        setIsLoading(false);
       } else {
-        router.push("/");
+        toast.error(data.message);
+        setIsLoading(false);
       }
     }
-  }, [isPending, isSuccess]);
+  }, [isPending, data]);
   return (
     <>
       <div className="flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center">

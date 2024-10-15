@@ -15,6 +15,7 @@ import "lightgallery/css/lg-thumbnail.css";
 import lgThumbnail from "lightgallery/plugins/thumbnail";
 import lgZoom from "lightgallery/plugins/zoom";
 import { Link } from "@nextui-org/link";
+import parse from "html-react-parser";
 
 interface IProps {
   post: IPost;
@@ -66,9 +67,7 @@ const PostCard = ({ post }: IProps) => {
         </CardBody>
       ) : (
         <CardBody className="py-2">
-          <p className="text-gray-700 text-sm">
-            {truncateText(description, 100)}
-          </p>
+          {parse(truncateText(description, 100))}
         </CardBody>
       )}
 
