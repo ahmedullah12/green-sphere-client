@@ -7,11 +7,10 @@ import GSForm from "@/src/components/form/GSForm";
 import GSInput from "@/src/components/form/GSInput";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { Button } from "@nextui-org/button";
-import { Textarea } from "@nextui-org/input";
-import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import Container from "@/src/components/UI/Container";
 import GSTextarea from "@/src/components/form/GSTextarea";
 import { Divider } from "@nextui-org/divider";
+import { Accordion, AccordionItem } from "@nextui-org/accordion";
 
 const fadeIn = {
   hidden: { opacity: 0 },
@@ -47,10 +46,10 @@ export default function ContactPage() {
   };
 
   return (
-    <div className=" mx-auto px-4 pb-8 bg-green-50 dark:bg-black">
+    <div className=" mx-auto px-4 pb-8 dark:bg-black">
       <Container>
         <motion.h1
-          className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-12 text-primary dark:text-white"
+          className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-12 text-primary dark:text-white"
           initial="hidden"
           animate="visible"
           variants={fadeIn}

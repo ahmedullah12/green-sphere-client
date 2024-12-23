@@ -7,7 +7,6 @@ import { useParams } from "next/navigation";
 import { useUser } from "@/src/context/user.provider";
 import { IUser } from "@/src/types";
 import { useGetUserData } from "@/src/hooks/user.hooks";
-import Loading from "@/src/components/UI/Loading";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { user: currentUser } = useUser();
