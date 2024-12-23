@@ -12,6 +12,7 @@ import {
 
 import { usePathname, useRouter } from "next/navigation";
 import { protectedRoutes } from "../constant";
+import Link from "next/link";
 
 export default function NavbarDropdown() {
   const router = useRouter();
@@ -37,17 +38,17 @@ export default function NavbarDropdown() {
         <Avatar className="cursor-pointer" src={user?.profilePhoto} />
       </DropdownTrigger>
       <DropdownMenu aria-label="Static Actions">
-        <DropdownItem onClick={() => handleNavigation("/profile")}>
-          Profile
+        <DropdownItem key="profile">
+          <Link href={"/profile"}>Profile</Link>
         </DropdownItem>
-        <DropdownItem
-          onClick={() =>
-            handleNavigation(
+        <DropdownItem key={"dashboard"}>
+          <Link
+            href={
               user?.role === "USER" ? "/user-dashboard" : "/admin-dashboard"
-            )
-          }
-        >
-          Dashboard
+            }
+          >
+            Dashboard
+          </Link>
         </DropdownItem>
         <DropdownItem onClick={() => handleLogout()} key="delete">
           Logout
