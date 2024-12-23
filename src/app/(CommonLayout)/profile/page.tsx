@@ -10,6 +10,7 @@ import Link from "next/link";
 
 const Profile = () => {
   const { user } = useUser();
+  
   const { data: posts, isLoading } = useGetMyPosts(user?._id as string);
 
   const filteredPosts = posts?.data.filter((post: IPost) => {

@@ -112,7 +112,7 @@ const ProfileSidebar = ({
 
   const renderUserList = (users: IUser[], type: string) => (
     <div>
-      <div className="flex justify-between items-center mb-2">
+      <div className="flex justify-between items-center pb-2">
         <h2 className="text-lg font-semibold">{type}</h2>
         {users?.length > 3 && (
           <Link
@@ -150,6 +150,7 @@ const ProfileSidebar = ({
     </div>
   );
 
+
   if (isLoading) {
     return <Loading />;
   }
@@ -162,8 +163,8 @@ const ProfileSidebar = ({
     );
   }
 
-  if (!profileUser) {
-    return <div className="p-4">User not found</div>;
+  if (!profileUser || !currentUser) {
+    return <Loading/>
   }
 
   return (
@@ -176,7 +177,7 @@ const ProfileSidebar = ({
             className="max-w-[200px] md:max-w-[400px] h-[150px] md:h-[200px] object-cover"
           />
         </div>
-        <div className="my-3">
+        <div className="">
           <div className="flex justify-between items-center">
             <h1 className="text-xl md:text-2xl font-semibold flex items-center gap-1">
               {profileUser?.name}{" "}

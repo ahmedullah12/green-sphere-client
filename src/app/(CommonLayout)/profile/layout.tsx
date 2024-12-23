@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import { useUser } from "@/src/context/user.provider";
 import { IUser } from "@/src/types";
 import { useGetUserData } from "@/src/hooks/user.hooks";
+import Loading from "@/src/components/UI/Loading";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { user: currentUser } = useUser();
@@ -38,7 +39,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   return (
     <Container>
-      <div className="my-3 flex flex-col md:flex-row w-full md:gap-12">
+      <div className=" flex flex-col md:flex-row w-full md:gap-12">
         <div className="w-full md:w-2/5 mb-6 md:mb-0">
           <ProfileSidebar
             profileUser={profileUser}
@@ -47,7 +48,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             refetch={userRefetch}
           />
         </div>
-        <div className="w-full md:w-4/5">{children}</div>
+        <div className="w-full md:w-4/5 my-3">{children}</div>
       </div>
     </Container>
   );

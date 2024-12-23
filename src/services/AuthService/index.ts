@@ -21,7 +21,7 @@ export const registerUser = async (userData: FieldValues) => {
 
     return data;
   } catch (err: any) {
-    throw new Error(err);
+    return err.response?.data;
   }
 };
 
@@ -38,6 +38,19 @@ export const loginUser = async (userData: FieldValues) => {
   } catch (err: any) {
     // throw new Error(err);
     return err.response?.data;
+  }
+};
+
+export const handleGoogleAuthSuccess = async (
+  accessToken: string,
+  refreshToken: string
+) => {
+  try {
+    cookies().set("accessToken", accessToken);
+    cookies().set("refreshToken", refreshToken);
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message };
   }
 };
 
@@ -68,7 +81,7 @@ export const changePassword = async (userId: string, userData: FieldValues) => {
 
     return data;
   } catch (err: any) {
-    throw new Error(err);
+    return err.response?.data;
   }
 };
 
@@ -81,7 +94,7 @@ export const passwordRecovery = async (userData: FieldValues) => {
 
     return data;
   } catch (err: any) {
-    throw new Error(err);
+    return err.response?.data;
   }
 };
 
@@ -99,7 +112,7 @@ export const resetPassword = async (token: string, userData: FieldValues) => {
 
     return data;
   } catch (err: any) {
-    throw new Error(err);
+    return err.response?.data;
   }
 };
 

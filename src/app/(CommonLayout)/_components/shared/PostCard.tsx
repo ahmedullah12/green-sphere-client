@@ -44,10 +44,9 @@ const PostCard = ({ post }: IProps) => {
             <h4 className="text-small font-semibold leading-none text-default-600">
               {userId?.name}
             </h4>
-            {/* <h5 className="text-small tracking-tight text-default-400">{userId?.email}</h5> */}
           </div>
         </div>
-        <h4 className="font-bold text-large mt-3">{title}</h4>
+        <h4 className="font-bold text-large mt-3">{truncateText(title, 25)}</h4>
       </CardHeader>
 
       {/* if has images showing image otherwise showing some text from description */}
@@ -66,8 +65,8 @@ const PostCard = ({ post }: IProps) => {
           </LightGallery>
         </CardBody>
       ) : (
-        <CardBody className="py-2">
-          {parse(truncateText(description, 100))}
+        <CardBody className="py-2 text-sm">
+          {parse(truncateText(description, 200))}
         </CardBody>
       )}
 

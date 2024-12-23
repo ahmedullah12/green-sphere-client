@@ -10,16 +10,19 @@ import { FieldValues, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useUser } from "@/src/context/user.provider";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function RegisterPage() {
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     mutate: handleUserRegistration,
     isPending,
-    isSuccess,
+    data,
   } = useUserRegistration();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
-  const {setIsLoading} = useUser();
+  const { setIsLoading } = useUser();
 
   const router = useRouter();
 
@@ -30,10 +33,9 @@ export default function RegisterPage() {
   };
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    if(!selectedImage){
-      return toast.error("Please upload a picture")
+    if (!selectedImage) {
+      return toast.error("Please upload a picture");
     }
-
 
     const formData = new FormData();
     const userData = {
@@ -48,25 +50,34 @@ export default function RegisterPage() {
     }
 
     handleUserRegistration(formData);
-    setIsLoading(true)
+    setIsLoading(true);
   };
 
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+
   useEffect(() => {
-    if (!isPending && isSuccess) {
-      router.push("/");
+    if (!isPending && data) {
+      if (data?.success) {
+        toast.success(data?.message);
+        router.push("/");
+      } else {
+        toast.error(data?.message);
+      }
     }
-  }, [isPending, isSuccess]);
+  }, [isPending, data]);
 
   return (
     <div className="flex h-[calc(100vh-100px)] flex-col items-center justify-center ">
       <div className="w-full md:w-[50%] lg:w-[35%] px-4 py-4 shadow-md">
-      <h3 className="my-2 text-xl font-bold text-center">Register with GreenSphere</h3>
+        <h3 className="my-2 text-xl font-bold text-center">
+          Register with GreenSphere
+        </h3>
         <GSForm onSubmit={onSubmit}>
           <div className="py-3">
-            <GSInput label="Name" name="name" size="sm" required={true}/>
+            <GSInput label="Name" name="name" size="sm" required={true} />
           </div>
           <div className="py-3">
-            <GSInput label="Email" name="email" size="sm" required={true}/>
+            <GSInput label="Email" name="email" size="sm" required={true} />
           </div>
           <div className="min-w-fit flex-1">
             <label
@@ -84,14 +95,23 @@ export default function RegisterPage() {
             />
           </div>
           <div className="py-3">
-            <GSInput
-              label="Password"
-              name="password"
-              size="sm"
-              type="password"
-              required={true}
-            />
-          </div>
+              <div className="py-3 relative">
+                <GSInput
+                  name="password"
+                  label="Password"
+                  size="sm"
+                  type={showPassword ? "text" : "password"}
+                  required={true}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
 
           <Button
             className="my-3 w-full bg-primary dark:bg-default text-white rounded-md"
@@ -103,7 +123,10 @@ export default function RegisterPage() {
           </Button>
         </GSForm>
         <div className="text-center">
-          Already have an account ? <Link className="hover:underline" href={"/login"}>Login</Link>
+          Already have an account ?{" "}
+          <Link className="hover:underline" href={"/login"}>
+            Login
+          </Link>
         </div>
       </div>
     </div>
