@@ -4,6 +4,11 @@
 
 Green Sphere is a social media type website where users can create post about gardening and tips. This is a Gardening Tips & Advice Platform.
 
+## Live URL
+client-side: https://greensphere.netlify.app
+<br/>
+server-side: https://assignment-6-server-six.vercel.app
+
 ## Project Description
 
 Gardening Tips & Advice Platform is a dynamic full-stack web application tailored for gardening enthusiasts and professionals alike, offering a space to share, discover, and engage with a wealth of gardening knowledge. From plant care advice to seasonal guides and advanced techniques, the platform empowers users to enhance their gardening experience.
