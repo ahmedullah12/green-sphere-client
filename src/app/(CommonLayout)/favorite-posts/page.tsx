@@ -7,6 +7,8 @@ import { useUser } from "@/src/context/user.provider";
 import { useGetFavourites } from "@/src/hooks/favourites.hook";
 import { Button } from "@nextui-org/button";
 import Link from "next/link";
+import PostCard from "../_components/shared/PostCard";
+import { MdFavorite } from "react-icons/md";
 
 const FavouritePosts = () => {
   const { user } = useUser();
@@ -16,24 +18,21 @@ const FavouritePosts = () => {
     if (user?.isVerified) return true;
     return favourite.postId.tag !== "PREMIUM";
   });
-  console.log(filteredPosts);
 
-  {isLoading && <Loading />}
+  {
+    isLoading && <Loading />;
+  }
   return (
     <div>
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold mb-6">Favourite Posts</h1>
-        <Link href="/profile">
-          <Button size="sm" className="bg-primary dark:bg-default text-white">
-            My Posts
-          </Button>
-        </Link>
+     <div className="flex items-center gap-3 mb-8">
+        <MdFavorite className="w-8 h-8 text-primary" />
+        <h1 className="text-3xl font-bold">Favorites</h1>
       </div>
-      
-      <div className="space-y-6">
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {filteredPosts && filteredPosts.length > 0 ? (
           filteredPosts?.map((favourite: any) => (
-            <Post key={favourite?.postId?._id} post={favourite?.postId} />
+            <PostCard key={favourite?.postId?._id} post={favourite?.postId} />
           ))
         ) : (
           <p>No posts to show</p>

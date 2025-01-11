@@ -126,3 +126,17 @@ export const getMyPosts = async (userId: string) => {
 
   return res.json();
 };
+export const getLikedPosts = async (userId: string) => {
+  const fetchOptions = {
+    next: {
+      tags: ["liked_posts"],
+    },
+  };
+  console.log(userId);
+  const res = await fetch(
+    `${envConfig.baseApi}/posts/liked-posts/${userId}`,
+    fetchOptions
+  );
+
+  return res.json();
+};

@@ -1,8 +1,9 @@
-import { useMutation, useQuery, } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   createPost,
   deletePost,
   downvotePost,
+  getLikedPosts,
   getMyPosts,
   getPosts,
   getSinglePost,
@@ -15,10 +16,9 @@ import { FieldValues } from "react-hook-form";
 export const useGetPosts = () => {
   return useQuery({
     queryKey: ["GET_POSTS"],
-    queryFn: async() => await getPosts()
-  })
-}
-
+    queryFn: async () => await getPosts(),
+  });
+};
 
 export const useCreatePost = () => {
   return useMutation<any, Error, FormData>({
@@ -65,8 +65,7 @@ export const useDeletePost = () => {
     },
   });
 };
-export const useUpvotePost = () => { 
-
+export const useUpvotePost = () => {
   return useMutation<any, Error, any>({
     mutationKey: ["UPVOTE_POST"],
     mutationFn: async ({ postId, userId }) => await upvotePost(postId, userId),
@@ -75,11 +74,11 @@ export const useUpvotePost = () => {
     },
   });
 };
-export const useDownvotePost = () => {  
-
+export const useDownvotePost = () => {
   return useMutation<any, Error, any>({
     mutationKey: ["DOWNVOTE_POST"],
-    mutationFn: async ({ postId, userId }) => await downvotePost(postId, userId),
+    mutationFn: async ({ postId, userId }) =>
+      await downvotePost(postId, userId),
     onError: (error) => {
       toast.error(error.message);
     },
@@ -89,7 +88,14 @@ export const useDownvotePost = () => {
 export const useGetMyPosts = (userId: string) => {
   return useQuery({
     queryKey: ["GET_MY_POSTS", userId],
-    queryFn: async() => await getMyPosts(userId),
+    queryFn: async () => await getMyPosts(userId),
     enabled: !!userId,
+  });
+};
+
+export const useGetLikedPosts = (userId: string) => {
+  return useQuery({
+    queryKey: ["GET_LIKED_POSTS", userId],
+    queryFn: async() => await getLikedPosts(userId)
   })
 }

@@ -95,7 +95,7 @@ const PostFooter = ({ post, user }: { post: IPost; user: IUser }) => {
   };
 
   const handleShare = () => {
-    const link = `https://greensphere.netlify.app/news-feed/${_id}`;
+    const link = `https://greensphere.netlify.app/news-feed/post/${_id}`;
     navigator.clipboard.writeText(link).then(
       () => {
         toast.success("Link copied to clipboard!");

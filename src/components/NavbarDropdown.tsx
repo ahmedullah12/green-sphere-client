@@ -9,29 +9,19 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown";
-
-import { usePathname, useRouter } from "next/navigation";
-import { protectedRoutes } from "../constant";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function NavbarDropdown() {
-  const router = useRouter();
   const { user, setIsLoading } = useUser();
-  const pathname = usePathname();
+  const router = useRouter();
 
   const handleLogout = () => {
     logout();
     setIsLoading(true);
-
-    if (protectedRoutes.some((route) => pathname.match(route))) {
-      router.push("/");
-    }
+    router.refresh(); 
+    router.push('/login');
   };
-
-  const handleNavigation = (pathname: string) => {
-    router.push(pathname);
-  };
-
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -50,7 +40,7 @@ export default function NavbarDropdown() {
             Dashboard
           </Link>
         </DropdownItem>
-        <DropdownItem onClick={() => handleLogout()} key="delete">
+        <DropdownItem onPress={handleLogout} key="delete">
           Logout
         </DropdownItem>
       </DropdownMenu>

@@ -71,7 +71,7 @@ const PostCard = ({ post }: IProps) => {
       )}
 
       <CardFooter className="flex justify-end">
-        <Link href={`/news-feed/post/${_id}`}>
+        <Link href={`/post/${_id}`}>
           <Button
             className="text-tiny bg-primary dark:bg-default text-white"
             radius="lg"

@@ -123,7 +123,7 @@ const Post = ({ post }: { post: IPost }) => {
               <Link href={image} data-src={image}>
                 <Image
                   alt="Card background"
-                  className="object-cover rounded-none z-0 max-h-[400px]"
+                  className="object-cover rounded-none z-0 max-h-[300px]"
                   src={image}
                   width="100%"
                 />

@@ -32,7 +32,7 @@ const CreatePaymentModal = ({ disable }: { disable: boolean }) => {
     <>
       <Button
         isDisabled={disable}
-        size="sm"
+        size="md"
         className="bg-blue-400 dark:bg-default text-white disabled:bg-gray-200 disabled:dark:bg-gray-200"
         onPress={() => setIsOpen(true)}
       >

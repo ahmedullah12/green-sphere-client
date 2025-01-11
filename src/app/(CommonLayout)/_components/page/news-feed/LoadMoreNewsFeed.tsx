@@ -40,7 +40,6 @@ export function LoadMoreNewsFeed() {
         },
       }
     );
-    console.log("Fetched data:", res.data);
     return res.data;
   };
 
@@ -81,8 +80,6 @@ export function LoadMoreNewsFeed() {
   const filteredPosts = React.useMemo(() => {
     return filterPremiumPosts(sortedPosts, user?.isVerified);
   }, [sortedPosts, user?.isVerified]);
-
-  console.log("Rendered posts:", filteredPosts);
 
   return (
     <InfiniteScroll

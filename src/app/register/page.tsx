@@ -67,7 +67,7 @@ export default function RegisterPage() {
   }, [isPending, data]);
 
   return (
-    <div className="flex h-[calc(100vh-100px)] flex-col items-center justify-center ">
+    <div className="flex min-h-screen flex-col items-center justify-center ">
       <div className="w-full md:w-[50%] lg:w-[35%] px-4 py-4 shadow-md">
         <h3 className="my-2 text-xl font-bold text-center">
           Register with GreenSphere
@@ -124,7 +124,7 @@ export default function RegisterPage() {
         </GSForm>
         <div className="text-center">
           Already have an account ?{" "}
-          <Link className="hover:underline" href={"/login"}>
+          <Link className="hover:underline text-primary font-semibold" href={"/login"}>
             Login
           </Link>
         </div>

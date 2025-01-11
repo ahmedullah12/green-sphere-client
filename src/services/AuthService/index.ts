@@ -116,9 +116,10 @@ export const resetPassword = async (token: string, userData: FieldValues) => {
   }
 };
 
-export const logout = () => {
+export const logout = async () => {
   cookies().delete("accessToken");
   cookies().delete("refreshToken");
+
 };
 
 export const getCurrentUser = async () => {
