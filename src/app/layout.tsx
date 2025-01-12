@@ -1,6 +1,7 @@
 import "@/src/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
+import './global.css'
 
 import { Providers } from "../lib/Providers";
 
