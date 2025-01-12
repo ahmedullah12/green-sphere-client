@@ -12,6 +12,7 @@ import FollowRequests from "../_components/page/home/FollowRequests";
 import CreatePostButton from "../_components/page/news-feed/CreatePostButton";
 import Filters from "../_components/page/news-feed/Filters";
 import { LoadMoreNewsFeed } from "../_components/page/news-feed/LoadMoreNewsFeed";
+import PopularPosts from "../_components/page/home/PopularPosts";
 
 const NewsFeed = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -36,7 +37,7 @@ const NewsFeed = () => {
       if (
         filtersRef.current &&
         !filtersRef.current.contains(event.target as Node) &&
-        !buttonRef.current?.contains(event.target as Node) 
+        !buttonRef.current?.contains(event.target as Node)
       ) {
         setShowFilters(false);
       }
@@ -116,6 +117,7 @@ const NewsFeed = () => {
               <div>
                 <GardeningQuotes />
               </div>
+              <PopularPosts />
             </div>
           </aside>
         </div>

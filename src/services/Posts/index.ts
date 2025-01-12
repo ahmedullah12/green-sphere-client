@@ -112,7 +112,6 @@ export const getLatestPosts = async () => {
   return res.json();
 };
 
-
 export const getMyPosts = async (userId: string) => {
   const fetchOptions = {
     next: {
@@ -139,4 +138,30 @@ export const getLikedPosts = async (userId: string) => {
   );
 
   return res.json();
+};
+
+export const createGroupPost = async (formData: FormData, groupId: string) => {
+  try {
+    const { data } = await axiosInstance.post(
+      `/posts/${groupId}/posts`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    revalidateTag("posts");
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
+};
+
+export const getGroupPosts = async (groupId: string) => {
+  const res = await axiosInstance.get(`/posts/${groupId}/posts`);
+
+  return res.data.data;
 };

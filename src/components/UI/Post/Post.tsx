@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Avatar } from "@nextui-org/avatar";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
@@ -29,6 +29,7 @@ import { MdVerified } from "react-icons/md";
 const Post = ({ post }: { post: IPost }) => {
   const { _id, title, image, description, tag, userId, category } = post || {};
   const [showEditOptions, setShowEditOptions] = useState(false);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   const { user } = useUser();
 
@@ -63,6 +64,20 @@ const Post = ({ post }: { post: IPost }) => {
       },
     });
   };
+
+  // Function to strip HTML tags for character count
+  const stripHtml = (html: string) => {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  };
+
+  const truncateLength = 200; // Adjust this value to change truncation length
+  const plainText = stripHtml(description);
+  const isTruncated = plainText.length > truncateLength;
+  const truncatedText = isTruncated 
+    ? description.substring(0, truncateLength) + '...'
+    : description;
 
   return (
     <Card className="py-4 mb-4">
@@ -134,7 +149,7 @@ const Post = ({ post }: { post: IPost }) => {
 
         <div className="px-2">
           <div className="flex justify-between items-start h-auto mt-4">
-            <p className=" text-xl font-medium mb-1 hover:underline">
+            <p className="text-xl font-medium mb-1 hover:underline">
               <Link href={`/news-feed/post/${_id}`}>{title}</Link>
             </p>
             {isFavorite ? (
@@ -153,7 +168,7 @@ const Post = ({ post }: { post: IPost }) => {
               </button>
             )}
           </div>
-          <div className=" flex gap-2 my-2">
+          <div className="flex gap-2 my-2">
             {category.map((item, index) => (
               <p
                 key={index}
@@ -163,7 +178,17 @@ const Post = ({ post }: { post: IPost }) => {
               </p>
             ))}
           </div>
-          <div>{parse(description)}</div>
+          <div>
+            {parse(showFullDescription ? description : truncatedText)}
+            {isTruncated && (
+              <button
+                onClick={() => setShowFullDescription(!showFullDescription)}
+                className="text-blue-500 hover:underline"
+              >
+                {showFullDescription ? 'See Less' : 'See More'}
+              </button>
+            )}
+          </div>
         </div>
       </CardBody>
 

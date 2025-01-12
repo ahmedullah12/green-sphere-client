@@ -24,7 +24,7 @@ const FavouritePosts = () => {
   }
   return (
     <div>
-     <div className="flex items-center gap-3 mb-8">
+      <div className="flex items-center gap-3 mb-8">
         <MdFavorite className="w-8 h-8 text-primary" />
         <h1 className="text-3xl font-bold">Favorites</h1>
       </div>

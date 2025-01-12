@@ -16,7 +16,6 @@ const LikedPosts = () => {
     return post.tag !== "PREMIUM";
   });
 
-  console.log(filteredPosts);
   {
     isLoading && <Loading />;
   }

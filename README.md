@@ -21,16 +21,15 @@ With a focus on social interaction and user-generated content, this platform pro
 
 ## Features
 
-- At first, you can see the Home page. It contains some good sections.
-- After that, there is the News Feed  page. Here you can see all the posts.
-- In the Meeting Rooms page, you can search posts or filter them.
+- At first,  there is the News Feed  page. Here you can see all the posts.
 - There you can create a post, and see their post.
 - You can also visit the post detail page
 - In a post you can upvote or downvote them , can also add comments
 - You can edit your post and delete them also
-- After that you can see very good About Us and Contact Us page.
+- After that you can see the Groups page where you can see the Groups and view their details.
+- In Group page you can see their details, members and posts.You can join or leave a group.
 - There is also the Profile page, where user can go to their profile and see their contents.
-- In Profile page, user can edit their profile and also change or recover their account password
+- In Profile page, user can edit their profile and also change or recover their account password.
 - User can verify their profile from profile page after they get at least one upvote in any of their post.
 - For User, they can see their Dashboard page, there they can see their posts, followers and following users.
 - There is a dashboard for Admin, there they can do a lot of things

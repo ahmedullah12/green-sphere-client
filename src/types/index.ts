@@ -73,3 +73,17 @@ export interface IPayment {
   updatedAt: string;
   __v: number;
 }
+
+
+export interface IGroup {
+  _id: string
+  name: string
+  description: string
+  creator: IUser
+  members: IUser[]
+  avatar: string
+  rules: any[]
+  createdAt: string
+  updatedAt: string
+  __v: number
+}

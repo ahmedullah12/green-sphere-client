@@ -1,8 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  createGroupPost,
   createPost,
   deletePost,
   downvotePost,
+  getGroupPosts,
   getLikedPosts,
   getMyPosts,
   getPosts,
@@ -96,6 +98,28 @@ export const useGetMyPosts = (userId: string) => {
 export const useGetLikedPosts = (userId: string) => {
   return useQuery({
     queryKey: ["GET_LIKED_POSTS", userId],
-    queryFn: async() => await getLikedPosts(userId)
-  })
-}
+    queryFn: async () => await getLikedPosts(userId),
+  });
+};
+
+export const useCreateGroupPost = () => {
+  return useMutation<any, Error, any>({
+    mutationKey: ["CREATE_GROUP_POST"],
+    mutationFn: async ({ postData, groupId }) =>
+      await createGroupPost(postData, groupId),
+    onSuccess: () => {
+      toast.success("Post Created Successfully!!!");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+export const useGetGroupPosts = (groupId: string) => {
+  return useQuery({
+    queryKey: ["GET_GROUP_POSTS", groupId],
+    queryFn: async () => await getGroupPosts(groupId),
+    enabled: !!groupId,
+  });
+};

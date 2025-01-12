@@ -88,7 +88,7 @@ const FollowRequests = () => {
               <Button
                 size="sm"
                 className="bg-primary text-white"
-                onClick={() => handleFollowBack(follower)}
+                onPress={() => handleFollowBack(follower)}
               >
                 Follow Back
               </Button>

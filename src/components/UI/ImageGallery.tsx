@@ -13,13 +13,17 @@ import "lightgallery/css/lg-thumbnail.css";
 import lgThumbnail from "lightgallery/plugins/thumbnail";
 import lgZoom from "lightgallery/plugins/zoom";
 import Container from "@/src/components/UI/Container";
+import { GalleryHorizontal } from "lucide-react";
 
 const ImageGallery = ({galleryImages}: {galleryImages: string[]}) => {
   return (
     <Container>
       <div className="mb-8">
         <div>
-        <h1 className="text-3xl text-center font-bold mb-5">Gallery</h1>
+       <div className="flex items-center gap-3 mb-8">
+               <GalleryHorizontal className="w-8 h-8 text-primary" />
+               <h1 className="text-3xl font-bold">Gallery</h1>
+             </div>
         </div>
         <LightGallery
           elementClassNames="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
