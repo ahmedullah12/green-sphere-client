@@ -1,10 +1,10 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { IPost } from "@/src/types";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { ArrowUp, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { ArrowUp, ArrowUp01, Loader2 } from "lucide-react";
 
 const fetchPopularPosts = async () => {
   const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API}/posts`, {

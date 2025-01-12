@@ -5,14 +5,14 @@ import useDebounce from "@/src/hooks/debounce.hook";
 import { Input } from "@nextui-org/input";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
-import { MouseEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsFillFilterSquareFill } from "react-icons/bs";
 import FollowRequests from "../_components/page/home/FollowRequests";
+import PopularPosts from "../_components/page/home/PopularPosts";
 import CreatePostButton from "../_components/page/news-feed/CreatePostButton";
 import Filters from "../_components/page/news-feed/Filters";
 import { LoadMoreNewsFeed } from "../_components/page/news-feed/LoadMoreNewsFeed";
-import PopularPosts from "../_components/page/home/PopularPosts";
 
 const NewsFeed = () => {
   const [showFilters, setShowFilters] = useState(false);

@@ -31,7 +31,7 @@ export default function DashboardLayout({
                   href="/"
                   className="text-2xl text-primary font-semibold italic"
                 >
-                  RoomReserve
+                  GreenSphere
                 </Link>
               </div>
             </div>
@@ -69,7 +69,7 @@ export default function DashboardLayout({
         <div>
           <div className="p-4">
             <p className="mb-3 text-2xl text-primary italic font-bold">
-              Dashboard
+              GreenSphere
             </p>
             <Divider />
           </div>

@@ -1,4 +1,5 @@
-import { BsFillPostcardHeartFill } from "react-icons/bs";
+import { LayoutDashboard } from "lucide-react";
+import { BsFillPostcardHeartFill, BsPostcard } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import { MdOutlinePayment } from "react-icons/md";
 
@@ -47,7 +48,12 @@ export const userSidebarItems = [
   },
 ];
 export const adminSidebarItems = [
-  { name: "All Posts", link: "/admin-dashboard", icon: <BsFillPostcardHeartFill /> },
+  {
+    name: "Dashboard",
+    link: "/admin-dashboard",
+    icon: <LayoutDashboard />,
+  },
+  { name: "All Posts", link: "/admin-dashboard/posts", icon: <BsPostcard /> },
   { name: "All Users", link: "/admin-dashboard/users", icon: <FaUser /> },
   {
     name: "Payments",

@@ -1,14 +1,10 @@
 "use client";
 
-import React from "react";
 import Loading from "@/src/components/UI/Loading";
-import Post from "@/src/components/UI/Post/Post";
 import { useUser } from "@/src/context/user.provider";
 import { useGetFavourites } from "@/src/hooks/favourites.hook";
-import { Button } from "@nextui-org/button";
-import Link from "next/link";
-import PostCard from "../_components/shared/PostCard";
 import { MdFavorite } from "react-icons/md";
+import PostCard from "../_components/shared/PostCard";
 
 const FavouritePosts = () => {
   const { user } = useUser();
