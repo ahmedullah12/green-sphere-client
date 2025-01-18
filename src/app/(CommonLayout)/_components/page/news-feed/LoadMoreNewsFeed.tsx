@@ -29,7 +29,7 @@ export function LoadMoreNewsFeed() {
 
   const fetchPosts = async ({ pageParam = 1 }) => {
     const res = await axios.get(
-      "https://assignment-6-server-six.vercel.app/api/posts",
+      "https://green-sphere-server.onrender.com/api/posts",
       {
         params: {
           sortBy: searchParams.get("sortBy") || "-createdAt",
