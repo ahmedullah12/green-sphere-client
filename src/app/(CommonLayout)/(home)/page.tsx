@@ -87,7 +87,7 @@ const NewsFeed = () => {
             <div className="hidden md:block mb-6">
               <CreatePostButton />
             </div>
-            <div className="flex justify-between gap-x-20 relative">
+            <div className="flex justify-between gap-x-6 md:gap-x-20 relative">
               <Input
                 size="sm"
                 type="text"
@@ -95,7 +95,7 @@ const NewsFeed = () => {
                 {...register("search")}
               />
               <button
-                ref={buttonRef} // Add ref to button
+                ref={buttonRef}
                 className="bg-primary text-white px-4 rounded-md hover:bg-primary/90 transition-colors"
                 onClick={() => setShowFilters(!showFilters)}
               >

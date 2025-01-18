@@ -107,16 +107,16 @@ export const Navbar = () => {
           </NavbarContent>
 
           {/* Mobile Menu */}
-          <NavbarMenu className="bg-gray-100 dark:bg-default">
+          <NavbarMenu className="bg-gray-100 text-black dark:bg-default">
             <div className="mx-4 mt-2 flex flex-col gap-2">
               {siteConfig.navMenuItems.map((item, index) => (
                 <NavbarMenuItem key={`${item}-${index}`}>
                   <Link
-                    className="text-black"
+                    className="text-black flex gap-x-5"
                     href={item.href}
                     size="lg"
                   >
-                    {item.label}
+                    <span>{item.icon}</span>{item.label}
                   </Link>
                 </NavbarMenuItem>
               ))}

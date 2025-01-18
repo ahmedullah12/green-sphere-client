@@ -1,6 +1,6 @@
 export type SiteConfig = typeof siteConfig;
-import { House, Images } from "lucide-react";
-import { MdGroupAdd } from "react-icons/md";
+import { Bell, House, Images } from "lucide-react";
+import { PiUsersThreeFill } from "react-icons/pi";
 
 export const siteConfig = {
   name: "Green Sphere",
@@ -11,8 +11,12 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: <MdGroupAdd size={26}/>,
+      label: <PiUsersThreeFill size={26}/>,
       href: "/groups",
+    },
+    {
+      label: <Bell />,
+      href: "/notifications",
     },
     {
       label: <Images />,
@@ -21,15 +25,18 @@ export const siteConfig = {
   ],
   navMenuItems: [
     {
-      label: <House />,
+      label: "Home",
+      icon: <House />,
       href: "/",
     },
     {
-      label: <MdGroupAdd />,
+      label: "Groups",
+      icon: <PiUsersThreeFill size={24}/>,
       href: "/groups",
     },
     {
-      label: <Images />,
+      label: "Gallery",
+      icon: <Images />,
       href: "/gallery",
     },
   ],

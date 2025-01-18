@@ -74,7 +74,6 @@ export interface IPayment {
   __v: number;
 }
 
-
 export interface IGroup {
   _id: string
   name: string
@@ -87,3 +86,14 @@ export interface IGroup {
   updatedAt: string
   __v: number
 }
+
+export type INotification = {
+  _id: string;
+  type: string;
+  recipient: IUser;
+  sender: IUser;
+  post: IPost;
+  read: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
