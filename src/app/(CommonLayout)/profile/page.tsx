@@ -16,7 +16,7 @@ const Profile = () => {
   const { user: currentUser } = useUser();
   const [selectedTab, setSelectedTab] = useState("posts");
   const [canVerify, setCanVerify] = useState(false);
-  
+
   const { data: posts, isLoading } = useGetMyPosts(currentUser?._id as string);
 
   const filteredPosts = posts?.data.filter((post: IPost) => {
@@ -36,7 +36,7 @@ const Profile = () => {
   if (isLoading || !currentUser) return <Loading />;
 
   return (
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="max-w-7xl mx-auto">
       {/* Cover Image */}
       <div className="h-64 bg-gray-200 dark:bg-gray-800 rounded-b-lg relative">
         <div className="absolute -bottom-16 left-8">
@@ -49,8 +49,8 @@ const Profile = () => {
       </div>
 
       {/* Profile Header */}
-      <div className="mt-20 px-8">
-        <div className="flex justify-between items-start">
+      <div className="mt-20 px-1 md:px-8">
+        <div className="flex flex-col md:flex-row justify-between items-start">
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-bold">{currentUser.name}</h1>
@@ -58,7 +58,12 @@ const Profile = () => {
                 <MdVerified className="text-blue-500" size={24} />
               )}
             </div>
-            <p className="text-gray-600 dark:text-gray-400">{currentUser.email}</p>
+            
+            <p className="text-gray-600 dark:text-gray-400">
+              {currentUser.email}
+            </p>
+
+            
             <div className="flex gap-4 mt-2">
               <span className="text-sm">
                 <strong>{filteredPosts?.length || 0}</strong> posts
@@ -70,19 +75,18 @@ const Profile = () => {
                 <strong>{currentUser.following?.length || 0}</strong> following
               </span>
             </div>
-          </div>
-          
-          <div className="flex gap-2">
-            <EditProfileModal />
-            {!currentUser.isVerified && (
-              <CreatePaymentModal disable={!canVerify} />
-            )}
+            <div className="flex gap-2 max-w-[120px] mt-2">
+              <EditProfileModal />
+              {!currentUser.isVerified && (
+                <CreatePaymentModal disable={!canVerify} />
+              )}
+            </div>
           </div>
         </div>
 
         {/* Tabs */}
-        <Tabs 
-          selectedKey={selectedTab} 
+        <Tabs
+          selectedKey={selectedTab}
           onSelectionChange={(key) => setSelectedTab(key.toString())}
           className="mt-8"
         >

@@ -45,12 +45,12 @@ const EditProfileModal = () => {
 
   return (
     <>
-      <Button
-        className="bg-primary dark:bg-default text-xs text-white w-full"
-        onPress={() => setIsOpen(true)}
+      <button
+        className="bg-primary dark:bg-default text-xs text-white w-full px-1 py-2 rounded-md"
+        onClick={() => setIsOpen(true)}
       >
         Edit Profile
-      </Button>
+      </button>
       <GSModal
         isOpen={isOpen}
         onOpenChange={(open) => setIsOpen(open)}

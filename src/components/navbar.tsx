@@ -38,8 +38,8 @@ export const Navbar = () => {
           <NavbarContent className="basis-1/5" justify="start">
             <NavbarBrand as="li" className=" max-w-fit">
               <NextLink className="flex justify-start items-center" href="/">
-                <Image width={70} src={logo} alt="logo"/>
-                <p className="text-xl font-bold text-inherit">GreenSphere</p>
+                <Image className="w-[60px] md:w-[70px]" src={logo} alt="logo"/>
+                <p className="text-md md:text-xl font-bold text-inherit">GreenSphere</p>
               </NextLink>
             </NavbarBrand>
           </NavbarContent>

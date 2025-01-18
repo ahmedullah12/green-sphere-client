@@ -42,8 +42,8 @@ const NotificationPage = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <Card className="bg-content1">
+    <div className="max-w-3xl px-4">
+      <div className="bg-content1">
         <div className="p-6">
           <h1 className="text-2xl font-bold mb-6">Notifications</h1>
 
@@ -56,25 +56,24 @@ const NotificationPage = () => {
               {notifications.map((notification) => (
                 <div key={notification._id}>
                   <div
-                    className={`flex items-start gap-4 p-4 rounded-lg transition-colors ${
+                    className={`flex flex-col md:flex-row items-start gap-4 p-4 rounded-lg transition-colors ${
                       !notification.read
                         ? "bg-primary-50 dark:bg-primary-900/20"
                         : "hover:bg-default-100"
                     }`}
                   >
-                    <div className="flex-shrink-0">
-                      <Avatar
-                        src={notification.sender?.profilePhoto}
-                        name={notification.sender?.name}
-                        className="w-10 h-10"
-                      />
-                    </div>
-
                     <div className="flex-grow">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-semibold">
-                          {notification.sender?.name}
-                        </span>
+                      <div className="flex items-center justify-between">
+                        <div className=" flex items-center gap-2 mb-1">
+                          <Avatar
+                            src={notification.sender?.profilePhoto}
+                            name={notification.sender?.name}
+                            className="w-10 h-10"
+                          />
+                          <span className="font-semibold">
+                            {notification.sender?.name}
+                          </span>
+                        </div>
                         <div className="flex items-center gap-1 text-default-500">
                           {getNotificationIcon(notification.type)}
                         </div>
@@ -83,21 +82,6 @@ const NotificationPage = () => {
                       <p className="text-sm text-default-700">
                         {getNotificationMessage(notification)}
                       </p>
-
-                      {notification.post && (
-                        <div className="mt-2 p-3 rounded-lg bg-default-100 dark:bg-default-50">
-                          <p className="text-sm font-medium line-clamp-2">
-                            {notification.post.title}
-                          </p>
-                          {notification.post.image && (
-                            <img
-                              src={notification.post.image}
-                              alt={notification.post.title}
-                              className="mt-2 rounded-md w-full max-h-40 object-cover"
-                            />
-                          )}
-                        </div>
-                      )}
 
                       <div className="mt-2 text-xs text-default-400">
                         {formatDistanceToNow(new Date(notification.createdAt), {
@@ -123,7 +107,7 @@ const NotificationPage = () => {
             </div>
           )}
         </div>
-      </Card>
+      </div>
     </div>
   );
 };

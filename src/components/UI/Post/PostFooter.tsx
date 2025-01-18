@@ -143,14 +143,17 @@ const PostFooter = ({ post, user }: { post: IPost; user: IUser }) => {
             }}
           >
             <BiComment className="text-xl" />
-            <span className="text-sm">Comment({comments?.data?.length})</span>
+            <span className="text-sm">
+              <span className="hidden md:block">Comment</span>
+              ({comments?.data?.length})
+            </span>
           </button>
           <button
             onClick={handleShare}
             className="flex items-center space-x-1 text-gray-500 hover:text-purple-500 transition-colors"
           >
             <BiShare className="text-xl" />
-            <span className="text-sm">Share</span>
+            <span className="text-sm hidden md:block">Share</span>
           </button>
         </div>
       </div>

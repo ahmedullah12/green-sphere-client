@@ -178,7 +178,7 @@ const Post = ({ post }: { post: IPost }) => {
               </p>
             ))}
           </div>
-          <div>
+          <div className="text-sm">
             {parse(showFullDescription ? description : truncatedText)}
             {isTruncated && (
               <button

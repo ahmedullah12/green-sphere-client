@@ -30,14 +30,13 @@ const CreatePaymentModal = ({ disable }: { disable: boolean }) => {
   };
   return (
     <>
-      <Button
-        isDisabled={disable}
-        size="md"
-        className="bg-blue-400 dark:bg-default text-white disabled:bg-gray-200 disabled:dark:bg-gray-200"
-        onPress={() => setIsOpen(true)}
+      <button
+        disabled={disable}
+        className="bg-blue-400 dark:bg-default text-white disabled:bg-gray-200 disabled:dark:bg-gray-200 text-xs px-1 py-2 rounded-md"
+        onClick={() => setIsOpen(true)}
       >
         Verify
-      </Button>
+      </button>
       <GSModal
         isOpen={isOpen}
         onOpenChange={(open) => setIsOpen(open)}

@@ -6,7 +6,11 @@ import { useGetMyPosts } from "@/src/hooks/posts.hooks";
 import { IPost, IUser } from "@/src/types";
 import { useParams } from "next/navigation";
 import { useUser } from "@/src/context/user.provider";
-import { useGetUserData, useFollowUser, useUnfollowUser } from "@/src/hooks/user.hooks";
+import {
+  useGetUserData,
+  useFollowUser,
+  useUnfollowUser,
+} from "@/src/hooks/user.hooks";
 import { useState, useEffect } from "react";
 import { Image } from "@nextui-org/image";
 import { MdVerified } from "react-icons/md";
@@ -19,11 +23,15 @@ const VisitedProfile = () => {
   const userId = params.userId as string;
   const [selectedTab, setSelectedTab] = useState("posts");
   const [isFollowing, setIsFollowing] = useState(false);
-  
+
   const { data: posts, isLoading } = useGetMyPosts(userId);
-  const { data: userData, isLoading: userDataLoading, refetch: userRefetch } = useGetUserData(userId);
+  const {
+    data: userData,
+    isLoading: userDataLoading,
+    refetch: userRefetch,
+  } = useGetUserData(userId);
   const { user: currentUser, setUser: setCurrentUser } = useUser();
-  
+
   const { mutate: handleFollow } = useFollowUser();
   const { mutate: handleUnfollow } = useUnfollowUser();
 
@@ -39,7 +47,7 @@ const VisitedProfile = () => {
 
   const handleFollowUser = () => {
     if (!currentUser || !visitedUser) return;
-    
+
     handleFollow(
       {
         userId: currentUser._id,
@@ -52,7 +60,7 @@ const VisitedProfile = () => {
           if (currentUser && setCurrentUser && visitedUser) {
             const updatedUser: IUser = {
               ...currentUser,
-              following: [...currentUser.following, visitedUser]
+              following: [...currentUser.following, visitedUser],
             };
             setCurrentUser(updatedUser);
           }
@@ -89,7 +97,8 @@ const VisitedProfile = () => {
     );
   };
 
-  if (isLoading || userDataLoading || !visitedUser || !currentUser) return <Loading />;
+  if (isLoading || userDataLoading || !visitedUser || !currentUser)
+    return <Loading />;
 
   const filteredPosts = posts?.data.filter((post: IPost) => {
     if (currentUser?.isVerified) return true;
@@ -97,7 +106,7 @@ const VisitedProfile = () => {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="max-w-7xl mx-auto md:px-4">
       <div className="h-64 bg-gray-200 dark:bg-gray-800 rounded-b-lg relative">
         <div className="absolute -bottom-16 left-8">
           <Image
@@ -108,7 +117,7 @@ const VisitedProfile = () => {
         </div>
       </div>
 
-      <div className="mt-20 px-8">
+      <div className="mt-20 px-1 md:px-8">
         <div className="flex justify-between items-start">
           <div>
             <div className="flex items-center gap-2">
@@ -117,7 +126,9 @@ const VisitedProfile = () => {
                 <MdVerified className="text-blue-500" size={24} />
               )}
             </div>
-            <p className="text-gray-600 dark:text-gray-400">{visitedUser.email}</p>
+            <p className="text-gray-600 dark:text-gray-400">
+              {visitedUser.email}
+            </p>
             <div className="flex gap-4 mt-2">
               <span className="text-sm">
                 <strong>{filteredPosts?.length || 0}</strong> posts
@@ -130,17 +141,17 @@ const VisitedProfile = () => {
               </span>
             </div>
           </div>
-          
-          <Button
-            className={isFollowing ? "bg-gray-200" : "bg-blue-500 text-white"}
+
+          <button
+            className={`px-1 py-2 rounded-md text-xs ${isFollowing ? "bg-gray-200" : "bg-blue-500 text-white"}`}
             onClick={isFollowing ? handleUnfollowUser : handleFollowUser}
           >
             {isFollowing ? "Following" : "Follow"}
-          </Button>
+          </button>
         </div>
 
-        <Tabs 
-          selectedKey={selectedTab} 
+        <Tabs
+          selectedKey={selectedTab}
           onSelectionChange={(key) => setSelectedTab(key.toString())}
           className="mt-8"
         >
