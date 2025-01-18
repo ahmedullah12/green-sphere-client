@@ -67,16 +67,16 @@ const Post = ({ post }: { post: IPost }) => {
 
   // Function to strip HTML tags for character count
   const stripHtml = (html: string) => {
-    const tmp = document.createElement('div');
+    const tmp = document.createElement("div");
     tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || '';
+    return tmp.textContent || tmp.innerText || "";
   };
 
   const truncateLength = 200; // Adjust this value to change truncation length
   const plainText = stripHtml(description);
   const isTruncated = plainText.length > truncateLength;
-  const truncatedText = isTruncated 
-    ? description.substring(0, truncateLength) + '...'
+  const truncatedText = isTruncated
+    ? description.substring(0, truncateLength) + "..."
     : description;
 
   return (
@@ -185,7 +185,7 @@ const Post = ({ post }: { post: IPost }) => {
                 onClick={() => setShowFullDescription(!showFullDescription)}
                 className="text-blue-500 hover:underline"
               >
-                {showFullDescription ? 'See Less' : 'See More'}
+                {showFullDescription ? "See Less" : "See More"}
               </button>
             )}
           </div>

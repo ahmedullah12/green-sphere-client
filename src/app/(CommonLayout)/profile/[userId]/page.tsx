@@ -2,21 +2,20 @@
 
 import Loading from "@/src/components/UI/Loading";
 import Post from "@/src/components/UI/Post/Post";
-import { useGetMyPosts } from "@/src/hooks/posts.hooks";
-import { IPost, IUser } from "@/src/types";
-import { useParams } from "next/navigation";
 import { useUser } from "@/src/context/user.provider";
+import { useGetMyPosts } from "@/src/hooks/posts.hooks";
 import {
-  useGetUserData,
   useFollowUser,
+  useGetUserData,
   useUnfollowUser,
 } from "@/src/hooks/user.hooks";
-import { useState, useEffect } from "react";
+import { IPost, IUser } from "@/src/types";
 import { Image } from "@nextui-org/image";
-import { MdVerified } from "react-icons/md";
-import { Button } from "@nextui-org/button";
-import { Tabs, Tab } from "@nextui-org/tabs";
+import { Tab, Tabs } from "@nextui-org/tabs";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { MdVerified } from "react-icons/md";
 
 const VisitedProfile = () => {
   const params = useParams();
@@ -35,7 +34,15 @@ const VisitedProfile = () => {
   const { mutate: handleFollow } = useFollowUser();
   const { mutate: handleUnfollow } = useUnfollowUser();
 
+  const router = useRouter();
+
   const visitedUser = userData?.data;
+
+  useEffect(() => {
+    if(currentUser?._id === userId){
+      return router.push("/profile")
+    }
+  }, [currentUser, userId])
 
   useEffect(() => {
     if (currentUser && visitedUser) {

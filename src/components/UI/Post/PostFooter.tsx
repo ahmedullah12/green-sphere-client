@@ -138,12 +138,12 @@ const PostFooter = ({ post, user }: { post: IPost; user: IUser }) => {
             onClick={() => {
               setShowCommentInput(!showCommentInput);
               if (!showCommentInput) {
-                refetchComments(); // Fetch comments when opening the comment section
+                refetchComments();
               }
             }}
           >
             <BiComment className="text-xl" />
-            <span className="text-sm">
+            <span className="text-sm flex gap-x-1">
               <span className="hidden md:block">Comment</span>
               ({comments?.data?.length})
             </span>

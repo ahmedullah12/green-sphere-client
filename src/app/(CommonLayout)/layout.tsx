@@ -1,10 +1,12 @@
 "use client";
 
 import { Navbar } from "@/src/components/navbar";
+import { useUser } from "@/src/context/user.provider";
 import { cn } from "@nextui-org/theme";
-import { Home, Users, Heart, Star, TrendingUp } from "lucide-react";
+import { Home, Users, Heart, Star } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 interface SidebarLink {
   icon: React.ComponentType<any>;
@@ -25,7 +27,7 @@ const sidebarLinks: SidebarLink[] = [
   },
   {
     icon: Heart,
-    label: "Liked Posts",
+    label: "Upvoted Posts",
     href: "/liked-posts",
   },
   {
@@ -55,7 +57,14 @@ const SidebarLink = ({ icon: Icon, label, href }: SidebarLink) => {
   );
 };
 
-export default function layout({ children }: { children: React.ReactNode }) {
+export default function CommonLayout({ children }: { children: React.ReactNode }) {
+  const {user, setIsLoading} = useUser();
+
+  useEffect(() => {
+    if(!user){
+      return setIsLoading(true)
+    }
+  }, [user])
   return (
    <>
    <Navbar/>
@@ -65,7 +74,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col h-full px-4 py-8">
           
           
-          {/* Navigation Links */}
+          {/* Navigation Links for large device */}
           <nav className="flex-1 space-y-1">
             {sidebarLinks.map((link) => (
               <SidebarLink key={link.href} {...link} />

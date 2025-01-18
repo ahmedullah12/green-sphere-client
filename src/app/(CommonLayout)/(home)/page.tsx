@@ -77,17 +77,16 @@ const NewsFeed = () => {
   }, [searchParams]);
 
   return (
-    <div className="min-h-screen w-full md:w-[80%] mx-auto">
-      <div className="container mx-auto px-4 mt-2">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left Sidebar and Filters */}
-
+    <div className="min-h-screen w-full ">
+      <div className="container px-4 mt-2">
+        <div className="flex justify-between flex-col lg:flex-row gap-8">
           {/* Main Content Area */}
           <main className=" lg:w-2/3 space-y-6 order-last lg:order-none">
+            <div className="max-w-[600px] mx-auto">
             <div className="hidden md:block mb-6">
               <CreatePostButton />
             </div>
-            <div className="flex justify-between gap-x-6 md:gap-x-20 relative">
+            <div className="flex justify-between gap-x-6 md:gap-x-20 relative mb-6">
               <Input
                 size="sm"
                 type="text"
@@ -113,6 +112,7 @@ const NewsFeed = () => {
             </div>
 
             <LoadMoreNewsFeed />
+            </div>
           </main>
 
           {/* Right Sidebar */}

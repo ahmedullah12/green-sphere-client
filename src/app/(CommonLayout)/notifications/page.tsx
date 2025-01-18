@@ -3,7 +3,6 @@
 import { useNotifications } from "@/src/context/notification.provider";
 import { Avatar } from "@nextui-org/avatar";
 import { Button } from "@nextui-org/button";
-import { Card } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { formatDistanceToNow } from "date-fns";
 import { Heart, MessageCircle, Users, ThumbsDown } from "lucide-react";
