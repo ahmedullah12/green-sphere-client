@@ -5,7 +5,7 @@ import { Avatar } from "@nextui-org/avatar";
 import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
 import { formatDistanceToNow } from "date-fns";
-import { Heart, MessageCircle, Users, ThumbsDown } from "lucide-react";
+import { Heart, MessageCircle, Users, ThumbsDown, Bell } from "lucide-react";
 
 const NotificationPage = () => {
   const { notifications, markAsRead } = useNotifications();
@@ -41,10 +41,13 @@ const NotificationPage = () => {
   };
 
   return (
-    <div className="max-w-3xl px-4">
+    <div className="max-w-3xl md:px-4">
       <div className="bg-content1">
-        <div className="p-6">
-          <h1 className="text-2xl font-bold mb-6">Notifications</h1>
+        <div className="p-1 md:p-6">
+          <div className="flex items-center gap-3 mb-8">
+            <Bell className="w-8 h-8 text-primary" />
+            <h1 className="text-2xl md:text-3xl font-bold">Notifications</h1>
+          </div>
 
           {notifications.length === 0 ? (
             <div className="text-center py-8 text-gray-500">

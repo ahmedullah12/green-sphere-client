@@ -133,7 +133,6 @@ export const getCurrentUser = async () => {
     const res = await axiosInstance.get(`/user/${decodedToken._id}`);
 
     const userData: IUser = await res.data.data;
-
     return userData;
   }
 

@@ -35,6 +35,11 @@ export const siteConfig = {
       href: "/groups",
     },
     {
+      label: "Notifications",
+      icon: <Bell />,
+      href: "/notifications",
+    },
+    {
       label: "Gallery",
       icon: <Images />,
       href: "/gallery",

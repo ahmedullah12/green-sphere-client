@@ -33,6 +33,7 @@ export async function middleware(request: NextRequest) {
   try {
     const user = await getCurrentUser();
 
+    console.log("middleware user", user);
     // If no user and trying to access public route, allow
     if (!user && isPublicRoute) {
       return NextResponse.next();

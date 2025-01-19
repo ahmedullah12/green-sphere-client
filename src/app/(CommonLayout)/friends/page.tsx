@@ -46,7 +46,7 @@ const Friends = () => {
     <div className="max-w-7xl mx-auto p-6">
       <div className="flex items-center gap-3 mb-8">
         <UserCheck className="w-8 h-8 text-primary" />
-        <h1 className="text-3xl font-bold">Friends</h1>
+        <h1 className="text-2xl md:text-3xl font-bold">Friends</h1>
         <span className="text-muted-foreground">({mutualFriends.length})</span>
       </div>
 

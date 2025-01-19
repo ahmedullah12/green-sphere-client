@@ -8,7 +8,7 @@ import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Users } from "lucide-react";
 import Link from "next/link";
-import { MdGroupAdd } from "react-icons/md";
+import { PiUsersThreeFill } from "react-icons/pi";
 
 const Groups = () => {
   const { data: groups, isLoading } = useGetGroups();
@@ -20,8 +20,8 @@ const Groups = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3 mb-8">
-          <MdGroupAdd className="w-8 h-8 text-primary" />
-          <h1 className="text-3xl font-bold">Groups</h1>
+          <PiUsersThreeFill className="w-8 h-8 text-primary" />
+          <h1 className="text-2xl md:text-3xl font-bold">Groups</h1>
         </div>
         <div>
           <CreateGroupModal />

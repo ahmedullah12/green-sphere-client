@@ -22,7 +22,7 @@ const ImageGallery = ({galleryImages}: {galleryImages: string[]}) => {
         <div>
        <div className="flex items-center gap-3 mb-8">
                <GalleryHorizontal className="w-8 h-8 text-primary" />
-               <h1 className="text-3xl font-bold">Gallery</h1>
+               <h1 className="text-xl md:text-3xl font-bold">Gallery</h1>
              </div>
         </div>
         <LightGallery
