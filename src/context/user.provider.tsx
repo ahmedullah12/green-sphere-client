@@ -1,4 +1,5 @@
-/* eslint-disable no-console */
+"use client";
+
 import {
   createContext,
   Dispatch,
@@ -10,6 +11,7 @@ import {
 } from "react";
 import { IUser } from "../types";
 import { getCurrentUser } from "../services/AuthService";
+import Loading from "../components/UI/Loading";
 
 const UserContext = createContext<IUserProviderValues | undefined>(undefined);
 
@@ -23,21 +25,37 @@ interface IUserProviderValues {
 const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<IUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [retryCount, setRetryCount] = useState(0);
 
   const handleUser = async () => {
     try {
       const fetchedUser = await getCurrentUser();
-      setUser(fetchedUser);
+
+      if (fetchedUser) {
+        setUser(fetchedUser);
+        setIsLoading(false);
+      } else {
+        setRetryCount((prev) => prev + 1);
+      }
     } catch (error) {
-      console.error("Failed to fetch user:", error);
-    } finally {
-      setIsLoading(false);
+      console.error("Error fetching user:", error);
+      setRetryCount((prev) => prev + 1);
     }
   };
 
   useEffect(() => {
-    handleUser();
-  }, []);
+    if (!user) {
+      const timeoutId = setTimeout(() => {
+        handleUser();
+      }, retryCount * 1000);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [user, retryCount]);
+
+  if (isLoading && !user) {
+    return <Loading />;
+  }
 
   return (
     <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading }}>

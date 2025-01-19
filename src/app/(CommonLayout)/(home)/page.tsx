@@ -13,8 +13,6 @@ import PopularPosts from "../_components/page/home/PopularPosts";
 import CreatePostButton from "../_components/page/news-feed/CreatePostButton";
 import Filters from "../_components/page/news-feed/Filters";
 import { LoadMoreNewsFeed } from "../_components/page/news-feed/LoadMoreNewsFeed";
-import { useSocket } from "@/src/context/socket.provider";
-import { useNotifications } from "@/src/context/notification.provider";
 
 const NewsFeed = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -23,11 +21,6 @@ const NewsFeed = () => {
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const router = useRouter();
-
-  const socket = useSocket();
-  const { notifications, markAsRead } = useNotifications();
-
-  console.log(notifications);
 
   const { register, watch } = useForm({
     defaultValues: {

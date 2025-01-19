@@ -150,7 +150,7 @@ const Post = ({ post }: { post: IPost }) => {
         <div className="px-2">
           <div className="flex justify-between items-start h-auto mt-4">
             <p className="text-xl font-medium mb-1 hover:underline">
-              <Link href={`/news-feed/post/${_id}`}>{title}</Link>
+              <Link href={`/post/${_id}`}>{title}</Link>
             </p>
             {isFavorite ? (
               <button
