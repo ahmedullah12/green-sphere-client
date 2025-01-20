@@ -40,12 +40,12 @@ const CreateGroupModal = () => {
 
   return (
     <>
-      <Button
-        className="bg-primary dark:bg-gray-500 text-white w-full"
-        onPress={() => setIsOpen(true)}
+      <button
+        className="bg-primary dark:bg-gray-500 text-white w-full px-1 md:px-2 py-2 rounded-md text-sm md:text-md"
+        onClick={() => setIsOpen(true)}
       >
         Create a Group
-      </Button>
+      </button>
       <GSModal
         isOpen={isOpen}
         onOpenChange={(open) => setIsOpen(open)}

@@ -12,6 +12,7 @@ import {
 import { IUser } from "../types";
 import { getCurrentUser } from "../services/AuthService";
 import Loading from "../components/UI/Loading";
+import { usePathname } from 'next/navigation';
 
 const UserContext = createContext<IUserProviderValues | undefined>(undefined);
 
@@ -22,10 +23,15 @@ interface IUserProviderValues {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
+const PUBLIC_ROUTES = ['/login', '/register', '/auth/forgot-password'];
+
 const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<IUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
+  const pathname = usePathname();
+
+  const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
 
   const handleUser = async () => {
     try {
@@ -36,24 +42,34 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
         setIsLoading(false);
       } else {
         setRetryCount((prev) => prev + 1);
+        if (isPublicRoute) {
+          setIsLoading(false);
+        }
       }
     } catch (error) {
       console.error("Error fetching user:", error);
       setRetryCount((prev) => prev + 1);
+      if (isPublicRoute) {
+        setIsLoading(false);
+      }
     }
   };
 
   useEffect(() => {
-    if (!user) {
+    if (isPublicRoute) {
+      setIsLoading(false);
+      setRetryCount(0);
+    } else if (!user) {
+      setIsLoading(true);
       const timeoutId = setTimeout(() => {
         handleUser();
       }, retryCount * 1000);
 
       return () => clearTimeout(timeoutId);
     }
-  }, [user, retryCount]);
+  }, [user, retryCount, pathname]);
 
-  if (isLoading && !user) {
+  if (isLoading && !user && !isPublicRoute) {
     return <Loading />;
   }
 

@@ -35,7 +35,7 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = `https://assignment-6-server-six.vercel.app/api/auth/google/login`;
+    window.location.href = `https://green-sphere-server.onrender.com/api/auth/google/login`;
   };
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);

@@ -70,7 +70,7 @@ export default function CommonLayout({ children }: { children: React.ReactNode }
    <Navbar/>
    <div className="relative min-h-screen lg:grid lg:grid-cols-[280px,1fr] mt-16">
       {/* Sidebar */}
-      <aside className="mt-[70px] fixed top-0 left-0 z-30 w-[280px] h-screen border-r dark:border-gray-800 bg-white dark:bg-gray-900 hidden lg:block">
+      <aside className="mt-[70px] fixed top-0 left-0 z-30 w-[320px] h-screen border-r dark:border-gray-800 bg-white dark:bg-gray-900 hidden lg:block">
         <div className="flex flex-col h-full px-4 py-8">
           
           
@@ -96,7 +96,7 @@ export default function CommonLayout({ children }: { children: React.ReactNode }
 
       {/* Main Content */}
       <main className="lg:col-start-2 mb-10">
-        <div className="container mx-auto px-1 md:px-4 py-8">{children}</div>
+        <div className="container mx-auto px-1 md:ps-16 md:pe-6 py-8">{children}</div>
       </main>
     </div>
    </>

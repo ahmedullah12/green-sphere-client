@@ -19,7 +19,7 @@ const FavouritePosts = () => {
     isLoading && <Loading />;
   }
   return (
-    <div>
+    <div className="">
       <div className="flex items-center gap-3 mb-8">
         <MdFavorite className="w-8 h-8 text-primary" />
         <h1 className="text-2xl md:text-3xl font-bold">Favorites</h1>

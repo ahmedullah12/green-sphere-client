@@ -17,8 +17,8 @@ const Groups = () => {
     isLoading && <Loading />;
   }
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
+    <div>
+      <div className="flex justify-between mb-6">
         <div className="flex items-center gap-3 mb-8">
           <PiUsersThreeFill className="w-8 h-8 text-primary" />
           <h1 className="text-2xl md:text-3xl font-bold">Groups</h1>
