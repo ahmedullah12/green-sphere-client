@@ -21,10 +21,16 @@ import { useUser } from "../context/user.provider";
 import NavbarDropdown from "./NavbarDropdown";
 import logo from "../assets/logo2.png";
 import Image from "next/image";
+import { useNotifications } from "../context/notification.provider";
 
 export const Navbar = () => {
   const pathname = usePathname();
   const { user } = useUser();
+  const { notifications } = useNotifications();
+
+  const unreadNotifications = notifications?.filter(
+    (noti) => noti.read === false
+  ).length;
 
   return (
     <>
@@ -38,8 +44,10 @@ export const Navbar = () => {
           <NavbarContent className="basis-1/5" justify="start">
             <NavbarBrand as="li" className=" max-w-fit">
               <NextLink className="flex justify-start items-center" href="/">
-                <Image className="w-[60px] md:w-[70px]" src={logo} alt="logo"/>
-                <p className="text-md md:text-xl font-bold text-inherit">GreenSphere</p>
+                <Image className="w-[60px] md:w-[70px]" src={logo} alt="logo" />
+                <p className="text-md md:text-xl font-bold text-inherit">
+                  GreenSphere
+                </p>
               </NextLink>
             </NavbarBrand>
           </NavbarContent>
@@ -55,7 +63,7 @@ export const Navbar = () => {
                     <NextLink
                       className={clsx(
                         linkStyles({ color: "foreground" }),
-                        "text-white font-medium px-3 py-2 rounded-md transition-all",
+                        "text-white font-medium px-3 py-2 rounded-md transition-all relative",
                         isActive
                           ? "border-b-2 border-white rounded-none"
                           : "border-none"
@@ -63,6 +71,12 @@ export const Navbar = () => {
                       href={item.href}
                     >
                       {item.label}
+                      {item.href === "/notifications" &&
+                        unreadNotifications > 0 && (
+                          <span className="absolute top-0 right-0 text-xs text-primary flex justify-center items-center  bg-white size-4 rounded-full ">
+                            {unreadNotifications}
+                          </span>
+                        )}
                     </NextLink>
                   </NavbarItem>
                 );
@@ -71,7 +85,10 @@ export const Navbar = () => {
           </NavbarContent>
 
           {/* Right Side - Theme Switch */}
-          <NavbarContent className="hidden sm:flex basis-1/5 sm:basis-full lg:me-6" justify="end">
+          <NavbarContent
+            className="hidden sm:flex basis-1/5 sm:basis-full lg:me-6"
+            justify="end"
+          >
             <NavbarItem className="hidden lg:flex">
               <ThemeSwitch />
             </NavbarItem>
@@ -82,7 +99,10 @@ export const Navbar = () => {
               </NavbarItem>
             ) : (
               <NavbarItem className="hidden lg:flex gap-2">
-                <Link className="text-white font-medium py-2 rounded-md transition-all" href="/login">
+                <Link
+                  className="text-white font-medium py-2 rounded-md transition-all"
+                  href="/login"
+                >
                   Login
                 </Link>
               </NavbarItem>
@@ -98,7 +118,10 @@ export const Navbar = () => {
               </NavbarItem>
             ) : (
               <NavbarItem className="lg:hidden gap-2">
-                <Link className="text-sm text-white py-2 rounded-md transition-all" href="/login">
+                <Link
+                  className="text-sm text-white py-2 rounded-md transition-all"
+                  href="/login"
+                >
                   Login
                 </Link>
               </NavbarItem>
@@ -116,7 +139,14 @@ export const Navbar = () => {
                     href={item.href}
                     size="lg"
                   >
-                    <span>{item.icon}</span>{item.label}
+                    <span>{item.icon}</span>
+                    <p>
+                      {item.label}
+                      {item.href === "/notifications" &&
+                        unreadNotifications > 0 && (
+                          <span className="">({unreadNotifications})</span>
+                        )}
+                    </p>
                   </Link>
                 </NavbarMenuItem>
               ))}

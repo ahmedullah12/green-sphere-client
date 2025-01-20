@@ -2,9 +2,10 @@ export type SiteConfig = typeof siteConfig;
 import { Bell, House, Images } from "lucide-react";
 import { PiUsersThreeFill } from "react-icons/pi";
 
+
 export const siteConfig = {
   name: "Green Sphere",
-  description: "Make beautiful websites regardless of your design experience.",
+  description: "Connect with gardening enthusiasts.",
   navItems: [
     {
       label: <House />,

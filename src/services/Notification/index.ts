@@ -7,3 +7,9 @@ export const getNotifications = async () => {
 
   return res.data;
 };
+
+export const markAllNotificationsAsRead = async () => {
+  const res = await axiosInstance.patch("/notifications/mark-all-read");
+
+  return res.data;
+};

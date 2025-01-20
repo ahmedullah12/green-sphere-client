@@ -9,15 +9,15 @@ import {
   useEffect,
   useState,
 } from "react";
+import Loading from "../components/UI/Loading";
+import { getNotifications, markAllNotificationsAsRead } from "../services/Notification";
+import { INotification } from "../types";
 import { useSocket } from "./socket.provider";
 import { useUser } from "./user.provider";
-import { INotification } from "../types";
-import Loading from "../components/UI/Loading";
-import { getNotifications } from "../services/Notification";
 
 interface INotificationProviderValues {
   notifications: INotification[];
-  markAsRead: (id: string) => void;
+  markAllAsRead: () => Promise<void>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
@@ -92,21 +92,21 @@ export function NotificationsProvider({
     };
   }, [socket, user]);
 
-  const markAsRead = async (id: string) => {
+  const markAllAsRead = async () => {
     try {
-      await fetch(`/api/notifications/${id}/read`, {
-        method: "PATCH",
-      });
+      await markAllNotificationsAsRead();
 
       setNotifications((prev) =>
-        prev.map((notification) =>
-          notification._id === id
-            ? { ...notification, read: true }
-            : notification
-        )
+        prev.map((notification) => ({
+          ...notification,
+          read: true,
+        }))
       );
+
+      socket?.on('notificationsMarkedRead', () => {
+      });
     } catch (error) {
-      console.error("Error marking notification as read:", error);
+      console.error('Error marking all notifications as read:', error);
     }
   };
 
@@ -116,7 +116,7 @@ export function NotificationsProvider({
 
   return (
     <NotificationContext.Provider
-      value={{ notifications, markAsRead, isLoading, setIsLoading }}
+      value={{ notifications, markAllAsRead, isLoading, setIsLoading }}
     >
       {children}
     </NotificationContext.Provider>

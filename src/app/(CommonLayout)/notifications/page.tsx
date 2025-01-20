@@ -2,13 +2,13 @@
 
 import { useNotifications } from "@/src/context/notification.provider";
 import { Avatar } from "@nextui-org/avatar";
-import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
 import { formatDistanceToNow } from "date-fns";
 import { Bell, Heart, MessageCircle, ThumbsDown, Users } from "lucide-react";
 
 const NotificationPage = () => {
-  const { notifications, markAsRead } = useNotifications();
+  const { notifications, markAllAsRead } = useNotifications();
+console.log(notifications);
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -44,9 +44,21 @@ const NotificationPage = () => {
     <div className="max-w-3xl">
       <div className="bg-content1">
         <div className="p-1">
-          <div className="flex items-center gap-3 mb-8">
-            <Bell className="w-8 h-8 text-primary" />
-            <h1 className="text-2xl md:text-3xl font-bold">Notifications</h1>
+          <div className="flex justify-between items-center mb-8">
+            <div className="flex item-center gap-3">
+              <Bell className="w-8 h-8 text-primary" />
+              <h1 className="text-2xl md:text-3xl font-bold">Notifications</h1>
+            </div>
+            <div>
+              {notifications.length > 0 && (
+                <button
+                  onClick={markAllAsRead}
+                  className="text-white text-sm md:text-md bg-primary dark:bg-default px-1 md:px-2 py-2 rounded-md"
+                >
+                  Mark all as read
+                </button>
+              )}
+            </div>
           </div>
 
           {notifications.length === 0 ? (
@@ -91,17 +103,6 @@ const NotificationPage = () => {
                         })}
                       </div>
                     </div>
-
-                    {!notification.read && (
-                      <Button
-                        size="sm"
-                        variant="light"
-                        className="flex-shrink-0"
-                        onClick={() => markAsRead(notification._id)}
-                      >
-                        Mark as read
-                      </Button>
-                    )}
                   </div>
                   <Divider className="my-2" />
                 </div>
