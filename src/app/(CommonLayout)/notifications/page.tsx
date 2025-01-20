@@ -5,7 +5,7 @@ import { Avatar } from "@nextui-org/avatar";
 import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
 import { formatDistanceToNow } from "date-fns";
-import { Heart, MessageCircle, Users, ThumbsDown, Bell } from "lucide-react";
+import { Bell, Heart, MessageCircle, ThumbsDown, Users } from "lucide-react";
 
 const NotificationPage = () => {
   const { notifications, markAsRead } = useNotifications();

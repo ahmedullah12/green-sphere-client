@@ -1,56 +1,95 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useSocket } from "./socket.provider";
 import { useUser } from "./user.provider";
-import { useGetNotifications } from "../hooks/notification.hook";
 import { INotification } from "../types";
+import Loading from "../components/UI/Loading";
+import { getNotifications } from "../services/Notification";
 
-type NotificationContextType = {
+interface INotificationProviderValues {
   notifications: INotification[];
   markAsRead: (id: string) => void;
-};
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+}
 
-const NotificationContext = createContext<NotificationContextType>({
-  notifications: [],
-  markAsRead: () => {},
-});
+const NotificationContext = createContext<INotificationProviderValues | undefined>(
+  undefined
+);
 
 export function NotificationsProvider({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const socket = useSocket();
   const [notifications, setNotifications] = useState<INotification[]>([]);
-  const { user } = useUser();
-  const { data: notificationsData, isLoading } = useGetNotifications();
+  const [isLoading, setIsLoading] = useState(true);
+  const [retryCount, setRetryCount] = useState(0);
+  const { user, isLoading: userLoading } = useUser();
+
+  const handleNotifications = async () => {
+    try {
+      const response = await getNotifications();
+      if (response?.data) {
+        setNotifications(response.data);
+        setIsLoading(false);
+        setRetryCount(0);
+      } else {
+        setRetryCount((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      setRetryCount((prev) => prev + 1);
+    }
+  };
 
   useEffect(() => {
-    if (notificationsData?.data) {
-      setNotifications(notificationsData.data);
+    if (!user || userLoading) {
+      setNotifications([]);
+      setIsLoading(false);
+      setRetryCount(0);
+      return;
     }
-  }, [notificationsData]);
+
+    setIsLoading(true);
+    const timeoutId = setTimeout(() => {
+      handleNotifications();
+    }, retryCount * 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [user, userLoading, retryCount]);
 
   // Socket event listeners
   useEffect(() => {
-    if (socket && user) {
-      socket.on("notification", (notification: INotification) => {
-        setNotifications((prev) => [notification, ...prev]);
-      });
+    if (!socket || !user) return;
 
-      socket.on("deleteNotification", (notificationId: string) => {
-        setNotifications((prev) =>
-          prev.filter((notification) => notification._id !== notificationId)
-        );
-      });
+    const handleNewNotification = (notification: INotification) => {
+      setNotifications((prev) => [notification, ...prev]);
+    };
 
-      // Cleanup
-      return () => {
-        socket.off("notification");
-        socket.off("deleteNotification");
-      };
-    }
+    const handleDeleteNotification = (notificationId: string) => {
+      setNotifications((prev) =>
+        prev.filter((notification) => notification._id !== notificationId)
+      );
+    };
+
+    socket.on("notification", handleNewNotification);
+    socket.on("deleteNotification", handleDeleteNotification);
+
+    return () => {
+      socket.off("notification", handleNewNotification);
+      socket.off("deleteNotification", handleDeleteNotification);
+    };
   }, [socket, user]);
 
   const markAsRead = async (id: string) => {
@@ -71,11 +110,26 @@ export function NotificationsProvider({
     }
   };
 
+  if (isLoading && !notifications.length && user && !userLoading) {
+    return <Loading />;
+  }
+
   return (
-    <NotificationContext.Provider value={{ notifications, markAsRead }}>
+    <NotificationContext.Provider
+      value={{ notifications, markAsRead, isLoading, setIsLoading }}
+    >
       {children}
     </NotificationContext.Provider>
   );
 }
 
-export const useNotifications = () => useContext(NotificationContext);
+export const useNotifications = () => {
+  const context = useContext(NotificationContext);
+
+  if (context === undefined) {
+    throw new Error(
+      "useNotifications must be used within the NotificationsProvider"
+    );
+  }
+  return context;
+};
