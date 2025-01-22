@@ -67,10 +67,10 @@ export const useDeleteGroup = () => {
   });
 };
 
-export const useGetMyGroups = () => {
+export const useGetMyGroups = (id: string) => {
   return useQuery({
-    queryKey: ["GET_MY_GROUPS"],
-    queryFn: async () => await getMyGroups(),
+    queryKey: ["GET_MY_GROUPS", id],
+    queryFn: async () => await getMyGroups(id),
   });
 };
 

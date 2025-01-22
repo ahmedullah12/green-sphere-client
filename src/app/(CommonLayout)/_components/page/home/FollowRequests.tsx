@@ -21,6 +21,7 @@ const FollowRequests = () => {
             (following: IUser) => following._id === follower._id
           )
       )
+      .reverse()
       .slice(0, 3);
   };
 

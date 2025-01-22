@@ -59,18 +59,10 @@ export const getGroups = async () => {
   return res.data.data;
 };
 
-export const getMyGroups = async () => {
-  const fetchOptions = {
-    next: {
-      tags: ["groups"],
-    },
-  };
-  const res = await fetch(
-    `${envConfig.baseApi}/groups/my-groups`,
-    fetchOptions
-  );
+export const getMyGroups = async (id: string) => {
+  const res = await axiosInstance.get(`/groups/my-group/${id}`);
 
-  return res.json();
+  return res.data;
 };
 
 export const joinGroup = async (groupId: string) => {
